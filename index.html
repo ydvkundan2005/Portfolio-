@@ -1,0 +1,871 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Kundan Yadav — AI Full Stack Developer</title>
+
+  <meta name="description" content="Portfolio of Kundan Yadav — AI Full Stack Developer. 3D scroll animations, projects, skills, contact." />
+
+
+
+  <!-- External libs: GSAP for animations and ScrollTrigger, Three.js for the hero 3D orb -->
+
+  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+
+  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+
+
+
+  <style>
+
+    :root{
+
+      --bg:#0b1020;
+
+      --card:#0f1724;
+
+      --muted:#98a0b3;
+
+      --accent1:#7c5cff; /* violet */
+
+      --accent2:#2ee6c7; /* teal */
+
+      --glass: rgba(255,255,255,0.04);
+
+      --glass-2: rgba(255,255,255,0.02);
+
+      --radius: 16px;
+
+      --mono: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+
+    }
+
+
+
+    /* Basic reset */
+
+    *{box-sizing:border-box}
+
+    html,body{height:100%;}
+
+    body{
+
+      margin:0;
+
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,0.08), transparent),
+
+                  radial-gradient(700px 400px at 90% 80%, rgba(46,230,199,0.04), transparent),
+
+                  var(--bg);
+
+      color:#e6eef8;
+
+      font-family:var(--mono);
+
+      -webkit-font-smoothing:antialiased;
+
+      -moz-osx-font-smoothing:grayscale;
+
+      overflow-x:hidden;
+
+      perspective:1200px; /* enables 3D perspective for transforms */
+
+    }
+
+
+
+    header{
+
+      position:fixed;left:0;right:0;top:16px;display:flex;justify-content:space-between;align-items:center;padding:12px 28px;z-index:60;backdrop-filter: blur(6px);
+
+    }
+
+    .brand{display:flex;gap:14px;align-items:center}
+
+    .logo{width:55px;height:55px;border-radius:15px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:#071028;box-shadow:0 6px 18px rgba(12,10,30,0.6);}
+
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600}
+
+    nav a:hover{color:white}
+
+
+
+    main{width:100%;}
+
+    section{min-height:100vh;display:grid;place-items:center;padding:140px 6vw;position:relative}
+
+
+
+    /* HERO */
+
+    .hero-wrap{display:grid;grid-template-columns:1fr 460px;gap:40px;align-items:center;width:100%;max-width:1200px}
+
+    .hero-left{max-width:720px}
+
+    h1{font-size:clamp(28px,5.6vw,56px);line-height:0.98;margin:0 0 12px}
+
+    .tag{font-weight:700;letter-spacing:-0.5px}
+
+    .lead{color:var(--muted);font-size:16px;margin-bottom:20px}
+
+    .cta{display:flex;gap:12px;align-items:center}
+
+    .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:12px 18px;border-radius:12px;color:#041026;font-weight:700;border:none;cursor:pointer;box-shadow:0 8px 30px rgba(46,56,97,0.32)}
+
+    .ghost{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);color:var(--muted);background:transparent}
+
+
+
+    /* 3D card area */
+
+    .stage{width:100%;height:420px;display:flex;align-items:center;justify-content:center;}
+
+    .card{
+
+      width:380px;height:320px;border-radius:22px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));box-shadow:0 30px 80px rgba(2,6,23,0.6);backdrop-filter: blur(8px);position:relative;transform-style:preserve-3d;overflow:hidden;padding:22px;display:flex;flex-direction:column;gap:10px
+
+    }
+
+    .chip{display:flex;gap:12px;align-items:center}
+
+    .avatar{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),var(--accent1));display:flex;align-items:center;justify-content:center;font-weight:700;color:#041028}
+
+    .meta{flex:1}
+
+    .meta b{display:block}
+
+    .glass-row{display:flex;gap:12px;margin-top:auto}
+
+    .glass{flex:1;padding:10px;border-radius:12px;background:var(--glass);border:1px solid rgba(255,255,255,0.02);font-size:13px}
+
+
+
+    /* Skills */
+
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1200px}
+
+    .skill{background:var(--card);padding:16px;border-radius:14px}
+
+    .skill h4{margin:0 0 8px}
+
+    .bar{height:10px;background:var(--glass-2);border-radius:10px;overflow:hidden}
+
+    .bar > i{display:block;height:100%;border-radius:10px;width:0%;background:linear-gradient(90deg,var(--accent1),var(--accent2))}
+
+
+
+    /* Projects */
+
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;width:100%;max-width:1200px}
+
+    .project{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:12px;min-height:180px;transform-style:preserve-3d}
+
+    .project h3{margin:0 0 8px}
+
+    .project p{color:var(--muted);font-size:14px}
+
+
+
+    /* Contact */
+
+    .contact-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:24px;border-radius:14px;display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:center;width:100%;max-width:1000px}
+
+    .form input,.form textarea{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+
+    .form button{margin-top:12px}
+
+
+
+    footer{padding:40px 6vw;color:var(--muted);text-align:center}
+
+
+
+    /* small screens */
+
+    @media (max-width:900px){
+
+      .hero-wrap{grid-template-columns:1fr;}
+
+      .stage{height:300px}
+
+      .skills-grid{grid-template-columns:repeat(2,1fr)}
+
+      .contact-card{grid-template-columns:1fr}
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+
+
+<header>
+
+  <div class="brand">
+
+    <div class="logo"><img src="https://media.licdn.com/dms/image/v2/D5603AQE7m2jRxU7NzQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1699598003713?e=2147483647&amp;v=beta&amp;t=ayA0h41xAs4Fw5_xbsxBdn4xmvlNhTtJFXl_OkAB1-k" height="60" width="60"></div>
+
+    <div>
+
+      <div style="font-weight:800">Kundan Yadav</div>
+
+      <div style="font-size:12px;color:var(--muted)">AI · Full Stack Developer</div>
+
+    </div>
+
+  </div>
+
+  <nav>
+
+    <a href="#about">About</a>
+
+    <a href="#skills">Skills</a>
+
+    <a href="#projects">Projects</a>
+
+    <a href="#contact">Contact</a>
+
+  </nav>
+
+</header>
+
+
+
+<main>
+
+  <!-- HERO -->
+
+  <section id="hero">
+
+    <div class="hero-wrap">
+
+      <div class="hero-left">
+
+        <div style="display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--accent2);font-weight:700;margin-bottom:12px">AI Full‑Stack • Machine Learning • Production</div>
+
+        <h1 class="tag">Kundan Yadav — <span style="color:var(--accent2)">AI Full Stack Developer</span></h1>
+
+        <p class="lead">I build scalable AI systems, production-grade ML microservices and delightful front-ends. I bridge models and products: APIs, pipelines, inference infra, and user‑facing apps.</p>
+
+        <div class="cta">
+
+          <button class="btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Work With Me</button>
+
+          <button class="ghost" onclick="window.open('#projects','_self')">See Projects</button>
+
+        </div>
+
+
+
+        <div style="margin-top:26px;display:flex;gap:12px;align-items:center">
+
+          <div class="glass" style="width:140px;">Open to: <b style="display:block">Remote/Contract</b></div>
+
+          <div class="glass" style="width:190px;">Location: <b style="display:block">India</b></div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- 3D stage: three.js canvas + 3D style card -->
+
+      <div class="stage">
+
+        <div id="three-root" style="position:absolute;width:460px;height:420px;right:6vw;pointer-events:none"></div>
+
+
+
+        <div class="card" id="profile-card">
+
+          <div class="chip">
+
+            <div class="avatar">KY</div>
+
+            <div class="meta"><b>Kundan Yadav</b><small style="color:var(--muted)">AI Full Stack Developer — MLOps • APIs • Frontend</small></div>
+
+            <div style="text-align:right;color:var(--muted);font-size:12px">5+ yrs</div>
+
+          </div>
+
+
+
+          <div style="margin-top:18px;color:var(--muted);font-size:14px">I design model-first systems and ship them to production: inference endpoints, observability, CI/CD for ML, and responsive frontends.</div>
+
+
+
+          <div class="glass-row">
+
+            <div class="glass">Python • Node • FastAPI</div>
+
+            <div class="glass">React • Three.js • GSAP</div>
+
+            <div class="glass">K8s • Docker • Terraform</div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+  </section>
+
+<section id="about" style="
+
+  background-image: 
+
+    linear-gradient(to bottom, #0f1724 0%, transparent 20%, transparent 80%, #0f1724 100%),
+
+    url('https://cdn.vectorstock.com/i/750p/62/33/futuristic-runner-vector-30376233.avif');
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+
+">
+
+  <div style="max-width:920px;text-align:center; background: rgb(2 6 23 / 72%); padding: 20px; border-radius: 12px;">
+
+    <h2 style="margin-bottom:8px">About</h2>
+
+    <p style="color:var(--muted);font-size:16px">
+
+      I combine deep learning knowledge with engineering practice. I build robust inference endpoints, monitoring, and intuitive frontends to expose model capabilities to users. I focus on reliability, latency, and delightful UX.
+
+    </p>
+
+    <div style="margin-top:26px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap">
+
+      <div style="padding:14px;border-radius:12px;background:var(--glass);min-width:220px">Model Deployment & CI/CD</div>
+
+      <div style="padding:14px;border-radius:12px;background:var(--glass);min-width:220px">Realtime Inference & Optimization</div>
+
+      <div style="padding:14px;border-radius:12px;background:var(--glass);min-width:220px">User‑centric Frontends</div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+ <!-- SKILLS -->
+
+<section id="skills" style="
+
+  padding-top:140px; 
+
+  padding-bottom:140px;
+
+  background-image: 
+
+    linear-gradient(to bottom, #0f1724 0%, transparent 20%, transparent 80%, #0f1724 100%),
+
+    url('https://cdn.vectorstock.com/i/750p/87/27/digital-network-background-vector-25148727.avif');
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+
+">
+
+  <div style="width:100%;max-width:1200px">
+
+    <h2 style="text-align:center;margin-bottom:18px">Skills & Tools</h2>
+
+    <div class="skills-grid">
+
+      <div class="skill">
+
+        <h4>Backend & APIs</h4>
+
+        <div class="bar" data-value="92"><i></i></div>
+
+        <p style="color:var(--muted);margin-top:8px">FastAPI, Node, DDD, REST/GraphQL, gRPC</p>
+
+      </div>
+
+
+
+      <div class="skill">
+
+        <h4>Machine Learning</h4>
+
+        <div class="bar" data-value="88"><i></i></div>
+
+        <p style="color:var(--muted);margin-top:8px">PyTorch, Transformers, Fine-tuning, Serving</p>
+
+      </div>
+
+
+
+      <div class="skill">
+
+        <h4>Frontend & UX</h4>
+
+        <div class="bar" data-value="86"><i></i></div>
+
+        <p style="color:var(--muted);margin-top:8px">React, Three.js, GSAP, Tailwind</p>
+
+      </div>
+
+
+
+      <div class="skill">
+
+        <h4>Infra & DevOps</h4>
+
+        <div class="bar" data-value="84"><i></i></div>
+
+        <p style="color:var(--muted);margin-top:8px">K8s, Docker, Terraform, CI/CD</p>
+
+      </div>
+
+
+
+      <div class="skill">
+
+        <h4>Data & Pipelines</h4>
+
+        <div class="bar" data-value="80"><i></i></div>
+
+        <p style="color:var(--muted);margin-top:8px">ETL, Feature Stores, Airflow</p>
+
+      </div>
+
+
+
+      <div class="skill">
+
+        <h4>Testing & Monitoring</h4>
+
+        <div class="bar" data-value="78"><i></i></div>
+
+        <p style="color:var(--muted);margin-top:8px">Prometheus, Grafana, SLOs</p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+  <!-- PROJECTS -->
+
+  <section id="projects">
+
+    <div style="width:100%;max-width:1200px">
+
+      <h2 style="text-align:center;margin-bottom:18px">Selected Projects</h2>
+
+      <div class="projects">
+
+        <article class="project" data-tilt>
+
+          <h3>Realtime Captioning (Prod)</h3>
+
+          <p>Low-latency ASR pipeline, streaming inference, and a React control panel for live monitoring. Deployed on K8s with autoscaling.</p>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">Python • RTMP • GPU • Prometheus</div>
+
+        </article>
+
+
+
+        <article class="project" data-tilt>
+
+          <h3>Multimodal Search</h3>
+
+          <p>Vector search service that fuses image & text embeddings, with a fast API and a polished front-end experience.</p>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">FAISS • FastAPI • React</div>
+
+        </article>
+
+
+
+        <article class="project" data-tilt>
+
+          <h3>Personal Agent SDK</h3>
+
+          <p>SDK for building task-specific agents with model orchestration, retry policies and unified metrics.</p>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">Node • Docker • CI</div>
+
+        </article>
+
+
+
+        <article class="project" data-tilt>
+
+          <h3>3D Visualizer</h3>
+
+          <p>Interactive Three.js visualizations for model introspection and embeddings projection with animated transitions.</p>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">Three.js • React</div>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- CONTACT -->
+
+  <section id="contact" style="padding-top:120px;padding-bottom:120px">
+
+    <div style="max-width:1000px;width:100%">
+
+      <h2 style="text-align:center;margin-bottom:18px">Contact</h2>
+
+      <div class="contact-card">
+
+        <div class="form">
+
+          <input placeholder="Your name" id="name" />
+
+          <input placeholder="Your email" id="email" />
+
+          <textarea placeholder="Message" rows="5" id="message"></textarea>
+
+          <button class="btn" onclick="sendMessage()">Send Message</button>
+
+        </div>
+
+        <div style="padding-left:8px">
+
+          <h4 style="margin-top:0">Let's build together</h4>
+
+          <p style="color:var(--muted)">Available for remote roles and freelance. Typical engagements: prototype → production.</p>
+
+
+
+          <div style="margin-top:18px;display:flex;flex-direction:column;gap:10px">
+
+            <div style="padding:12px;border-radius:12px;background:var(--glass)">Email: <b>kundan@example.com</b></div>
+
+            <div style="padding:12px;border-radius:12px;background:var(--glass)">LinkedIn: <b>linkedin.com/in/kundan-yadav</b></div>
+
+            <div style="padding:12px;border-radius:12px;background:var(--glass)">GitHub: <b>github.com/kundany</b></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+</main>
+
+
+
+<footer>
+
+  © <span id="year"></span> Kundan Yadav — AI Full Stack Developer • Built with ❤️ and a pinch of 3D
+
+</footer>
+
+
+
+<script>
+
+  // small helpers & initial state
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+
+
+  // Animate skill bars on reveal
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.bar').forEach(bar=>{
+
+    const value = bar.getAttribute('data-value')||80;
+
+    gsap.to(bar.querySelector('i'),{
+
+      width: value+'%',
+
+      scrollTrigger:{trigger:bar, start:'top 80%'} ,
+
+      duration:1.2, ease:'power2.out'
+
+    })
+
+  })
+
+
+
+  // Animate project cards with tilt and subtle 3D pop
+
+  document.querySelectorAll('[data-tilt]').forEach((card,i)=>{
+
+    gsap.from(card,{
+
+      y:40, opacity:0, rotationX:6, transformOrigin:'center top', delay: i*0.08, duration:0.9,
+
+      scrollTrigger: { trigger: card, start: 'top 90%' }
+
+    })
+
+
+
+    // Mouse-based tilt
+
+    card.addEventListener('mousemove', e=>{
+
+      const r = card.getBoundingClientRect();
+
+      const px = (e.clientX - r.left)/r.width - 0.5;
+
+      const py = (e.clientY - r.top)/r.height - 0.5;
+
+      gsap.to(card,{rotationY: px*8, rotationX: -py*8, scale:1.02, duration:0.4})
+
+    })
+
+    card.addEventListener('mouseleave', ()=> gsap.to(card,{rotationY:0,rotationX:0,scale:1,duration:0.6}))
+
+  })
+
+
+
+  // Scroll triggered 3D sections: subtle rotateX and translateZ
+
+  gsap.utils.toArray('section').forEach((sec, idx)=>{
+
+    if(idx===0) return; // skip hero
+
+    gsap.fromTo(sec, {rotationX:6, z:-120, opacity:0, transformOrigin:'center top'}, {
+
+      rotationX:0, z:0, opacity:1, duration:1.1, ease:'power3.out',
+
+      scrollTrigger:{trigger:sec, start: 'top 85%', end: 'bottom 40%', scrub: false}
+
+    })
+
+  })
+
+
+
+  // Floating profile card parallax relative to scroll
+
+  gsap.to('#profile-card',{
+
+    y: -40, rotationY:10, ease:'none',
+
+    scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:0.6}
+
+  })
+
+
+
+  // send message (demo-only, replace with backend endpoint)
+
+  function sendMessage(){
+
+    const name=document.getElementById('name').value||'Someone';
+
+    const email=document.getElementById('email').value||'no-reply@example.com';
+
+    const message=document.getElementById('message').value||'';
+
+    const body = `Hi, I'm ${name} (${email})\n\n${message}`;
+
+    // fallback: mailto for demo
+
+    window.location.href = `mailto:kundan@example.com?subject=${encodeURIComponent('Portfolio message from '+name)}&body=${encodeURIComponent(body)}`;
+
+  }
+
+
+
+  /* THREE.JS: hero floating orb + soft particles */
+
+  (function(){
+
+    const root = document.getElementById('three-root');
+
+    const width = 460, height = 420;
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1000);
+
+    camera.position.set(0,0,180);
+
+
+
+    const renderer = new THREE.WebGLRenderer({alpha:true,antialias:true});
+
+    renderer.setSize(width, height); renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+    root.appendChild(renderer.domElement);
+
+
+
+    // subtle gradient-like lights
+
+    const light1 = new THREE.DirectionalLight(0x7c5cff,1.2); light1.position.set(50,50,100);
+
+    const light2 = new THREE.DirectionalLight(0x2ee6c7,0.8); light2.position.set(-50,-30,80);
+
+    scene.add(light1, light2);
+
+
+
+    // orb geometry
+
+    const g = new THREE.IcosahedronGeometry(46, 3);
+
+    const mat = new THREE.MeshStandardMaterial({
+
+      roughness:0.1, metalness:0.6, envMapIntensity:0.8,
+
+      color:0x5d47ff, transparent:true, opacity:0.95
+
+    });
+
+    const orb = new THREE.Mesh(g, mat); scene.add(orb);
+
+
+
+    // animated wireframe shell
+
+    const geo2 = new THREE.IcosahedronGeometry(66, 2);
+
+    const mat2 = new THREE.MeshBasicMaterial({color:0x2ee6c7, wireframe:true, opacity:0.12, transparent:true});
+
+    const shell = new THREE.Mesh(geo2, mat2); scene.add(shell);
+
+
+
+    // particles
+
+    const pCount = 120; const pts = new THREE.BufferGeometry();
+
+    const arr = new Float32Array(pCount*3);
+
+    for(let i=0;i<pCount;i++){ arr[i*3+0]=(Math.random()-0.5)*260; arr[i*3+1]=(Math.random()-0.5)*260; arr[i*3+2]=(Math.random()-0.5)*260 }
+
+    pts.setAttribute('position', new THREE.BufferAttribute(arr,3));
+
+    const part = new THREE.Points(pts, new THREE.PointsMaterial({size:3,opacity:0.6,transparent:true})); scene.add(part);
+
+
+
+    // subtle animation loop
+
+    function loop(t){
+
+      orb.rotation.y += 0.0035; orb.rotation.x = Math.sin(t/2000)*0.08;
+
+      shell.rotation.y -= 0.0018; shell.rotation.x += 0.0009; part.rotation.y += 0.0008;
+
+      renderer.render(scene, camera);
+
+      requestAnimationFrame(loop);
+
+    }
+
+    loop(0);
+
+
+
+    // responsive
+
+    window.addEventListener('resize', ()=>{
+
+      renderer.setSize(width, height);
+
+    })
+
+
+
+    // interactive slight parallax on mouse over hero area
+let bounds = root.getBoundingClientRect();
+
+    root.addEventListener('mousemove', e=>{
+
+      const x = (e.clientX - bounds.left)/bounds.width - 0.5;
+
+      const y = (e.clientY - bounds.top)/bounds.height - 0.5;
+
+      gsap.to(orb.rotation, {y: x*0.8, x: y*0.6, duration:0.8});
+
+      gsap.to(shell.rotation, {y: x*-0.6, x: y*-0.4, duration:0.9});
+
+    })
+
+
+
+  })();
+
+
+
+  // small polish: nav link highlight while scrolling
+
+  const sections = document.querySelectorAll('main section');
+
+  sections.forEach(s=>{
+
+    ScrollTrigger.create({
+
+      trigger: s, start: 'top 45%', end: 'bottom 20%', onEnter: ()=> highlight(s.id), onEnterBack: ()=> highlight(s.id)
+
+    })
+
+  })
+
+  function highlight(id){
+
+    document.querySelectorAll('nav a').forEach(a=>a.style.color='var(--muted)');
+
+    const el = document.querySelector(`nav a[href='#${id}']`); if(el) el.style.color='white';
+
+  }
+
+
+
+</script>
+
+</body>
+
+</html>
+
+
+    
