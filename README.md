@@ -26,7 +26,7 @@ A modern and interactive personal portfolio website showcasing my skills, projec
 - CSS3
 - JavaScript (ES6)
 
-### Libraries
+### Librarie
 - Three.js
 - GSAP
 - ScrollTrigger
