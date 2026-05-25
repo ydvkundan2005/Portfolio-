@@ -21,7 +21,7 @@ A modern and interactive personal portfolio website showcasing my skills, projec
 
 ## 🛠️ Tech Stack
 
-### Frontend
+### Frontend 
 - HTML5
 - CSS3
 - JavaScript (ES6)
