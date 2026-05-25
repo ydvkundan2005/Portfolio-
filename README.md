@@ -4,7 +4,7 @@ A modern and interactive personal portfolio website showcasing my skills, projec
 
 ---
 
-## ✨ Features
+## ✨ Feature
 
 - Modern dark-themed user interface
 - Responsive design for all devices
