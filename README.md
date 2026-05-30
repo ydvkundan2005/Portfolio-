@@ -7,7 +7,7 @@ A modern as well as interactive personal portfolio website showcasing my skills,
 ## ✨ Feature
 
 - Modern dark-themed user interface
-- Responsive design for all devices
+- Responsive design for all type of devices
 - Interactive 3D elements using Three.js
 - Smooth animations and transitions using GSAP
 - Professional profile showcase
