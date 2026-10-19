@@ -1,0 +1,27 @@
+name: Publish portfolio v1.2.1 release
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.head_commit.message == 'Release portfolio v1.2.1 - refine Claude palette'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.2.1
+          name: Portfolio v1.2.1 - Portrait & Claude Palette Polish
+          target_commitish: main
+          generate_release_notes: true
+          body: |
+            Final colour and layout refinement for the portfolio.
+
+            - The profile portrait is now a single circular image at the marked hero position, with editorial name and role copy underneath
+            - The Three.js object preserves its geometry and motion with warm Claude-inspired terracotta tones
+            - About and Skills include restrained technical line-art graphics

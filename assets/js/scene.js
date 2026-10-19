@@ -31,7 +31,7 @@ if (canvas && frame && visual) {
     scene.add(sculpture);
     const coreGeometry = new THREE.IcosahedronGeometry(1.08, 2);
     const coreMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xdce4ce, metalness: 0.78, roughness: 0.24, clearcoat: 1,
+      color: 0xe8d3c9, metalness: 0.78, roughness: 0.24, clearcoat: 1,
       clearcoatRoughness: 0.18, emissive: 0x28130e, emissiveIntensity: 0.28
     });
     sculpture.add(new THREE.Mesh(coreGeometry, coreMaterial));
