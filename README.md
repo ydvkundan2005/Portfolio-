@@ -7,10 +7,10 @@ A responsive portfolio for Kundan Prasad Yadav, a B.Tech Computer Science and En
 
 ## Design and implementation
 
-- Minimal dark visual system with warm white typography and a restrained lime accent.
-- Responsive portrait panel with careful crop, edge treatment, and caption.
-- Three.js sculpture with wireframe geometry, orbital rings, lighting, fine particles, and pointer-responsive movement.
-- Native scroll reveals, reading progress, active section navigation, and gentle card interactions.
+- Minimal dark visual system with warm editorial typography and a restrained Claude-inspired terracotta accent (#D97757).
+- Circular portrait at the start of the hero with deliberate face crop and an editorial name caption.
+- Three.js sculpture with its geometry preserved, warm terracotta lighting, wireframe details, orbital rings, fine particles, and pointer-responsive movement.
+- Native scroll reveals, reading progress, active section navigation, interactive portrait framing, and subtle editorial graphics in the About and Skills sections.
 - Mobile navigation and reduced-motion support.
 - Semantic HTML, keyboard focus states, and descriptive image text.
 

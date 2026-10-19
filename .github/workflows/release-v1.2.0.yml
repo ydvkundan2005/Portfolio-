@@ -1,0 +1,29 @@
+name: Publish portfolio v1.2.0 release
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.head_commit.message == 'Release portfolio v1.2.0 - Claude-inspired editorial polish'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.2.0
+          name: Portfolio v1.2.0 - Editorial Portrait & Claude Palette
+          target_commitish: main
+          generate_release_notes: true
+          body: |
+            A refined visual pass on the premium minimalist portfolio.
+
+            - Moved the profile photo to the marked circular hero placement with a name and role caption beneath
+            - Preserved the Three.js sculpture geometry and animation while replacing green accents with warm Claude-inspired terracotta
+            - Added editorial serif typography
+            - Added technical line-art graphics to About and Skills
+            - Kept responsive layout, accessibility, projects, résumé, and contact links

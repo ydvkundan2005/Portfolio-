@@ -15,12 +15,12 @@ if (canvas && frame && visual) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
     camera.position.set(0, 0, 6.8);
-    scene.add(new THREE.HemisphereLight(0xf3f6e7, 0x151a0d, 1.4));
+    scene.add(new THREE.HemisphereLight(0xfaf9f5, 0x291e1a, 1.4));
 
-    const keyLight = new THREE.PointLight(0xe7ffc0, 38, 20);
+    const keyLight = new THREE.PointLight(0xf1c2b1, 38, 20);
     keyLight.position.set(3.2, 2.7, 4.5);
     scene.add(keyLight);
-    const rimLight = new THREE.PointLight(0xd9ff78, 28, 18);
+    const rimLight = new THREE.PointLight(0xd97757, 24, 18);
     rimLight.position.set(-3.1, -1.3, 2.2);
     scene.add(rimLight);
     const backLight = new THREE.PointLight(0xffffff, 10, 16);
@@ -32,22 +32,22 @@ if (canvas && frame && visual) {
     const coreGeometry = new THREE.IcosahedronGeometry(1.08, 2);
     const coreMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xdce4ce, metalness: 0.78, roughness: 0.24, clearcoat: 1,
-      clearcoatRoughness: 0.18, emissive: 0x18200d, emissiveIntensity: 0.28
+      clearcoatRoughness: 0.18, emissive: 0x28130e, emissiveIntensity: 0.28
     });
     sculpture.add(new THREE.Mesh(coreGeometry, coreMaterial));
 
     const wireGeometry = new THREE.IcosahedronGeometry(1.19, 2);
-    const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xd9ff78, wireframe: true, transparent: true, opacity: 0.16 });
+    const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xd97757, wireframe: true, transparent: true, opacity: 0.16 });
     sculpture.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
     const ringMaterial = new THREE.MeshStandardMaterial({
-      color: 0xd9ff78, metalness: 0.66, roughness: 0.35, emissive: 0x334b13, emissiveIntensity: 0.22
+      color: 0xd97757, metalness: 0.66, roughness: 0.35, emissive: 0x4b2017, emissiveIntensity: 0.22
     });
     const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.012, 8, 150), ringMaterial);
     ringA.rotation.set(0.98, 0.15, 0.46);
     sculpture.add(ringA);
     const ringB = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.006, 6, 160), new THREE.MeshBasicMaterial({
-      color: 0xc9d3b1, transparent: true, opacity: 0.34
+      color: 0xe8e6dc, transparent: true, opacity: 0.34
     }));
     ringB.rotation.set(1.3, -0.7, -0.23);
     sculpture.add(ringB);
@@ -70,14 +70,14 @@ if (canvas && frame && visual) {
     const pointGeometry = new THREE.BufferGeometry();
     pointGeometry.setAttribute('position', new THREE.BufferAttribute(pointPositions, 3));
     const points = new THREE.Points(pointGeometry, new THREE.PointsMaterial({
-      color: 0xe8f0d5, size: 0.017, transparent: true, opacity: 0.48, sizeAttenuation: true, depthWrite: false
+      color: 0xfaf9f5, size: 0.017, transparent: true, opacity: 0.48, sizeAttenuation: true, depthWrite: false
     }));
     scene.add(points);
 
     const satellite = new THREE.Mesh(
       new THREE.SphereGeometry(0.055, 20, 20),
       new THREE.MeshStandardMaterial({
-        color: 0xd9ff78, emissive: 0x91b93a, emissiveIntensity: 0.8, metalness: 0.25, roughness: 0.3
+        color: 0xd97757, emissive: 0x9d4e34, emissiveIntensity: 0.8, metalness: 0.25, roughness: 0.3
       })
     );
     scene.add(satellite);
