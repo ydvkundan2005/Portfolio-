@@ -1,0 +1,29 @@
+name: Publish portfolio v1.1.0 release
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.head_commit.message == 'Release portfolio v1.1.0 - 3D motion update'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.1.0
+          name: Portfolio v1.1.0 - 3D & Motion Update
+          target_commitish: main
+          generate_release_notes: true
+          body: |
+            A motion-focused refinement of the premium minimalist portfolio.
+
+            - Improved portrait framing and placement
+            - Added a Three.js 3D sculpture with orbital rings, particles, and pointer response
+            - Added scroll-triggered reveals, reading progress, and subtle hover motion
+            - Split the project into HTML, CSS, and JavaScript files
+            - Preserved existing projects and profile links

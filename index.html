@@ -3,353 +3,178 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="Portfolio of Kundan Prasad Yadav, a B.Tech Computer Science student interested in software engineering, Java, backend development, and building useful web applications.">
+  <meta name="theme-color" content="#090a08">
+  <meta name="description" content="Kundan Prasad Yadav — Computer Science student focused on Java, backend development, and building useful web applications.">
   <meta property="og:title" content="Kundan Prasad Yadav — Software Engineer">
-  <meta property="og:description" content="Projects, skills, and contact information for Kundan Prasad Yadav.">
+  <meta property="og:description" content="Selected projects, technical interests, and contact information for Kundan Prasad Yadav.">
   <meta property="og:type" content="website">
   <title>Kundan Prasad Yadav — Software Engineer</title>
   <link rel="preconnect" href="https://media.licdn.com">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --surface-raised: #151515;
-      --text: #f4f4f1;
-      --muted: #a1a19b;
-      --subtle: #70706b;
-      --line: #2a2a27;
-      --accent: #d4ff70;
-      --max: 1120px;
-      --radius: 14px;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    a { color: inherit; text-decoration: none; }
-    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 4px;
-    }
-    img { max-width: 100%; display: block; }
-    button, input, textarea { font: inherit; }
-    .skip-link {
-      position: absolute; left: 16px; top: -60px; z-index: 20;
-      padding: 10px 14px; color: var(--bg); background: var(--accent); border-radius: 6px;
-    }
-    .skip-link:focus { top: 12px; }
-    .shell { width: min(calc(100% - 48px), var(--max)); margin-inline: auto; }
-
-    .site-header {
-      position: sticky; top: 0; z-index: 10;
-      background: rgb(10 10 10 / 91%); backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgb(255 255 255 / 7%);
-    }
-    .nav-wrap { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .brand { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
-    .brand-photo { width: 38px; height: 38px; object-fit: cover; border-radius: 50%; border: 1px solid var(--line); }
-    .brand-name { font-size: 14px; font-weight: 650; letter-spacing: -.02em; white-space: nowrap; }
-    .brand-tag { display: block; margin-top: -2px; font: 10px/1.5 var(--mono); color: var(--subtle); letter-spacing: .08em; text-transform: uppercase; }
-    .nav-links { display: flex; align-items: center; gap: 30px; }
-    .nav-links a { color: var(--muted); font-size: 13px; transition: color .18s ease; }
-    .nav-links a:hover, .nav-links a[aria-current="location"] { color: var(--text); }
-    .nav-links .nav-contact { color: var(--text); border: 1px solid #484842; border-radius: 999px; padding: 9px 15px; }
-    .menu-toggle { display: none; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: transparent; padding: 8px 11px; cursor: pointer; }
-
-    main { overflow: clip; }
-    .hero { padding: clamp(76px, 11vw, 140px) 0 106px; }
-    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(230px, .65fr); gap: clamp(40px, 8vw, 110px); align-items: center; }
-    .eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 24px; font: 11px/1.4 var(--mono); text-transform: uppercase; color: var(--muted); letter-spacing: .12em; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgb(212 255 112 / 9%); }
-    h1 { max-width: 780px; margin: 0; font-size: clamp(46px, 7.4vw, 88px); line-height: .99; letter-spacing: -.075em; font-weight: 630; }
-    h1 span { display: block; color: #797973; font-weight: 500; }
-    .hero-copy { max-width: 610px; margin: 29px 0 0; color: #b5b5ae; font-size: clamp(16px, 1.7vw, 18px); line-height: 1.8; }
-    .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
-    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; gap: 9px; padding: 0 17px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; font-weight: 600; transition: transform .18s ease, background .18s ease, border-color .18s ease; cursor: pointer; }
-    .button:hover { transform: translateY(-2px); border-color: #5e5e55; }
-    .button-primary { color: #111; background: var(--accent); border-color: var(--accent); }
-    .button-primary:hover { background: #e0ff99; border-color: #e0ff99; }
-    .button-secondary { background: transparent; color: var(--text); }
-    .arrow { display: inline-block; font-size: 15px; line-height: 1; }
-    .hero-photo-wrap { justify-self: end; width: min(100%, 290px); position: relative; }
-    .hero-photo-wrap::before { content: ""; position: absolute; inset: 12px -12px -12px 12px; border: 1px solid #393931; border-radius: 14px; }
-    .hero-photo { position: relative; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 35%; border: 1px solid #373731; border-radius: 12px; filter: saturate(.78); background: var(--surface); }
-    .photo-caption { position: relative; margin-top: 24px; display: flex; justify-content: space-between; gap: 10px; color: var(--subtle); font: 10px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
-    .photo-caption span:last-child { color: var(--muted); }
-    .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 25px; }
-    .pill { display: inline-flex; align-items: center; border: 1px solid #30302b; color: #c8c8c1; border-radius: 999px; padding: 6px 10px; font: 10px/1.4 var(--mono); }
-
-    .section { padding: 94px 0; border-top: 1px solid var(--line); }
-    .section-heading { display: grid; grid-template-columns: 160px 1fr; gap: 24px; align-items: start; margin-bottom: 42px; }
-    .section-kicker { margin: 8px 0 0; color: var(--subtle); font: 11px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .1em; }
-    h2 { margin: 0; font-size: clamp(30px, 4vw, 47px); font-weight: 570; letter-spacing: -.055em; line-height: 1.12; }
-    .section-intro { max-width: 680px; margin: 18px 0 0; color: var(--muted); font-size: 15px; line-height: 1.85; }
-    .about-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-left: 184px; }
-    .about-note { padding: 17px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
-    .about-note strong { display: block; font-size: 13px; font-weight: 600; }
-    .about-note span { display: block; margin-top: 5px; color: var(--subtle); font-size: 12px; }
-
-    .skills-layout { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-    .skill-group { min-height: 184px; padding: 23px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .skill-group h3 { margin: 0 0 19px; color: var(--muted); font: 11px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
-    .skill-items { display: flex; flex-wrap: wrap; gap: 7px; }
-    .skill-items span { color: #e0e0d9; border: 1px solid #30302b; background: #121212; padding: 7px 9px; border-radius: 5px; font-size: 12px; }
-
-    .projects-list { border-top: 1px solid var(--line); }
-    .project { display: grid; grid-template-columns: 62px minmax(0, 1fr) minmax(160px, .42fr); gap: 26px; padding: 28px 0; border-bottom: 1px solid var(--line); align-items: start; }
-    .project-number { color: var(--subtle); font: 11px/1.7 var(--mono); padding-top: 4px; }
-    .project h3 { margin: 0; font-size: clamp(18px, 2vw, 23px); font-weight: 570; letter-spacing: -.03em; }
-    .project p { max-width: 650px; margin: 12px 0 0; color: var(--muted); font-size: 13px; line-height: 1.85; }
-    .project-tech { justify-self: end; max-width: 230px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
-    .project-tech span { border: 1px solid #30302b; border-radius: 5px; padding: 5px 7px; font: 10px/1.4 var(--mono); color: #bcbcb5; }
-
-    .contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, .65fr); gap: 70px; align-items: start; }
-    .contact-lead { margin: 18px 0 0; max-width: 590px; color: var(--muted); line-height: 1.85; font-size: 15px; }
-    .contact-links { border-top: 1px solid var(--line); }
-    .contact-link { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); color: #deded8; font-size: 13px; transition: color .18s ease; }
-    .contact-link:hover { color: var(--accent); }
-    .contact-link span:last-child { color: var(--subtle); font-size: 16px; }
-    .contact-form { margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--line); }
-    .contact-form label { display: block; color: #d7d7d0; font-size: 12px; margin-bottom: 7px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
-    .contact-form input, .contact-form textarea { display: block; width: 100%; margin: 0 0 15px; padding: 12px 13px; border-radius: 7px; border: 1px solid #30302b; color: var(--text); background: #101010; }
-    .contact-form textarea { min-height: 118px; resize: vertical; }
-    .contact-form input::placeholder, .contact-form textarea::placeholder { color: #73736d; }
-    .form-note { margin: 11px 0 0; color: var(--subtle); font-size: 11px; line-height: 1.6; }
-
-    .site-footer { padding: 24px 0 34px; border-top: 1px solid var(--line); }
-    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; color: var(--subtle); font: 10px/1.7 var(--mono); text-transform: uppercase; letter-spacing: .07em; }
-    .footer-inner a { color: var(--muted); }
-    .footer-inner a:hover { color: var(--accent); }
-
-    @media (max-width: 820px) {
-      .hero-grid { grid-template-columns: minmax(0, 1fr) 210px; gap: 36px; }
-      .hero-photo-wrap { width: 210px; }
-      .section-heading { grid-template-columns: 110px 1fr; }
-      .about-bottom { margin-left: 134px; }
-      .skills-layout { grid-template-columns: repeat(2, 1fr); }
-      .project { grid-template-columns: 40px minmax(0,1fr); gap: 15px 20px; }
-      .project-tech { grid-column: 2; justify-self: start; justify-content: flex-start; max-width: 100%; }
-      .contact-grid { gap: 36px; }
-    }
-    @media (max-width: 620px) {
-      .shell { width: min(calc(100% - 36px), var(--max)); }
-      .nav-wrap { height: 68px; }
-      .menu-toggle { display: inline-flex; }
-      .nav-links { display: none; position: absolute; top: 67px; left: 0; right: 0; padding: 12px 18px 20px; border-bottom: 1px solid var(--line); background: #0c0c0c; flex-direction: column; align-items: stretch; gap: 0; }
-      .nav-links.is-open { display: flex; }
-      .nav-links a { padding: 12px 4px; }
-      .nav-links .nav-contact { text-align: center; margin-top: 7px; padding: 11px 14px; }
-      .hero { padding: 64px 0 72px; }
-      .hero-grid { display: flex; flex-direction: column-reverse; align-items: stretch; gap: 44px; }
-      .hero-photo-wrap { width: min(62%, 240px); justify-self: auto; align-self: flex-start; margin-left: 12px; }
-      .eyebrow { margin-bottom: 18px; }
-      h1 { font-size: clamp(43px, 13vw, 66px); }
-      .hero-copy { margin-top: 22px; font-size: 15px; }
-      .hero-meta { margin-top: 20px; }
-      .section { padding: 66px 0; }
-      .section-heading { display: block; margin-bottom: 30px; }
-      .section-kicker { margin: 0 0 16px; }
-      .about-bottom { margin: 26px 0 0; grid-template-columns: 1fr; }
-      .skills-layout { grid-template-columns: 1fr; }
-      .skill-group { min-height: auto; padding: 20px; }
-      .project { padding: 23px 0; gap: 10px 12px; }
-      .project-number { padding-top: 5px; }
-      .project-tech { grid-column: 2; }
-      .contact-grid { grid-template-columns: 1fr; gap: 36px; }
-      .form-row { grid-template-columns: 1fr; gap: 0; }
-      .footer-inner { align-items: flex-start; flex-direction: column; gap: 7px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    }
-  </style>
+  <link rel="stylesheet" href="./assets/css/styles.css">
+  <script>document.documentElement.classList.add('has-js');</script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="shell nav-wrap">
-      <a class="brand" href="#top" aria-label="Kundan Prasad Yadav, home">
-        <img class="brand-photo" src="https://media.licdn.com/dms/image/v2/D5603AQHoI-DE9G20zQ/profile-displayphoto-shrink_200_200/B56Z2NMugWH4AY-/0/1776190418452?e=1793836800&v=beta&t=eTi1FI7gw9fLDkwExVCbyvhv54zGJlA17qjct4REpTI" alt="" width="38" height="38">
-        <span><span class="brand-name">Kundan P. Yadav</span><span class="brand-tag">Software engineering</span></span>
+  <div class="page-grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
+
+  <header class="site-header" id="top">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="Kundan P. Yadav, back to top">
+        <span class="brand-mark" aria-hidden="true">KY<span>.</span></span>
+        <span class="brand-copy"><strong>Kundan P. Yadav</strong><small>Software engineering</small></span>
       </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
-      <nav class="nav-links" id="site-navigation" aria-label="Main navigation">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a class="nav-contact" href="#contact">Contact ↗</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+        <span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+        <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a>
+        <a class="nav-contact" href="#contact">Contact <span aria-hidden="true">↗</span></a>
       </nav>
     </div>
   </header>
 
   <main id="main-content">
-    <section class="hero shell" id="top" aria-labelledby="hero-title">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> B.Tech CSE · Aditya University · Class of 2027</p>
-          <h1 id="hero-title">Kundan Prasad Yadav<span>Software Engineer</span></h1>
-          <p class="hero-copy">I’m a computer science student interested in backend development, Java and data structures, and building practical web applications. I enjoy working on clean APIs, thoughtful system design, and reliable database integration.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#projects">Explore my work <span class="arrow" aria-hidden="true">↘</span></a>
-            <a class="button button-secondary" href="https://github.com/user-attachments/files/26242857/Kundan_Prasad_Yadav_Resume.pdf" target="_blank" rel="noopener noreferrer">View résumé <span class="arrow" aria-hidden="true">↗</span></a>
-          </div>
-          <div class="hero-meta" aria-label="Areas of interest">
-            <span class="pill">Java &amp; DSA</span><span class="pill">Backend development</span><span class="pill">Web applications</span>
-          </div>
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow reveal"><span class="status-dot" aria-hidden="true"></span> B.Tech CSE · Aditya University · Class of 2027</p>
+        <h1 class="hero-title reveal" data-delay="1" id="hero-title">I build with <span>clarity.</span><br>I solve with <span>curiosity.</span></h1>
+        <p class="hero-lead reveal" data-delay="2">I'm <strong>Kundan Prasad Yadav</strong>, a computer science student interested in backend development, Java and data structures, and building practical web applications. I enjoy working on clean APIs, thoughtful system design, and reliable database integration.</p>
+        <div class="hero-actions reveal" data-delay="3">
+          <a class="button button-primary" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
+          <a class="button button-quiet" href="https://github.com/user-attachments/files/26242857/Kundan_Prasad_Yadav_Resume.pdf" target="_blank" rel="noopener noreferrer">View résumé <span aria-hidden="true">↗</span></a>
         </div>
-        <div class="hero-photo-wrap">
-          <img class="hero-photo" src="https://media.licdn.com/dms/image/v2/D5603AQHoI-DE9G20zQ/profile-displayphoto-shrink_200_200/B56Z2NMugWH4AY-/0/1776190418452?e=1793836800&v=beta&t=eTi1FI7gw9fLDkwExVCbyvhv54zGJlA17qjct4REpTI" alt="Portrait of Kundan Prasad Yadav" width="200" height="250" fetchpriority="high">
-          <div class="photo-caption"><span>Based in India</span><span>Open to opportunities</span></div>
+        <div class="hero-meta reveal" data-delay="4"><span>Based in India</span><span class="meta-separator" aria-hidden="true"></span><span>Open to opportunities</span></div>
+      </div>
+
+      <div class="hero-visual reveal" data-delay="2" id="hero-visual" aria-label="Animated 3D sculpture and profile portrait">
+        <div class="visual-orbit-label" aria-hidden="true"><span class="tiny-cross">✳</span> A little structure. A lot of curiosity.</div>
+        <div class="scene-halo" aria-hidden="true"></div>
+        <div class="scene-frame" id="scene-frame">
+          <canvas id="hero-canvas" aria-hidden="true"></canvas>
+          <div class="scene-fallback" aria-hidden="true"></div>
+        </div>
+        <div class="visual-coordinate" aria-hidden="true"><span>FIG. 01</span><span>FORM / MOTION</span></div>
+        <article class="portrait-card">
+          <div class="portrait-photo-wrap">
+            <img class="portrait-photo" src="https://media.licdn.com/dms/image/v2/D5603AQHoI-DE9G20zQ/profile-displayphoto-shrink_200_200/B56Z2NMugWH4AY-/0/1776190418452?e=1793836800&v=beta&t=eTi1FI7gw9fLDkwExVCbyvhv54zGJlA17qjct4REpTI" alt="Portrait of Kundan Prasad Yadav" width="200" height="200" fetchpriority="high" referrerpolicy="no-referrer">
+            <span class="portrait-ring" aria-hidden="true"></span>
+          </div>
+          <div class="portrait-caption">
+            <span class="caption-kicker">THE PERSON BEHIND THE CODE</span>
+            <strong>Kundan Prasad Yadav</strong>
+            <span>Software engineering · 2027</span>
+          </div>
+          <span class="portrait-index" aria-hidden="true">KY—01</span>
+        </article>
+        <p class="visual-footnote" aria-hidden="true">DESIGNED TO MOVE, BUILT TO LAST.</p>
+      </div>
+      <a class="scroll-cue" href="#about"><span class="scroll-line" aria-hidden="true"></span><span>Scroll to explore</span></a>
+    </section>
+
+    <section class="section shell about-section" id="about" aria-labelledby="about-title">
+      <div class="section-heading reveal"><p class="section-index">01 / ABOUT</p><h2 id="about-title">Learning by <span>building.</span></h2></div>
+      <div class="about-grid">
+        <p class="about-statement reveal">A strong foundation, built one thoughtful step at a time.</p>
+        <div class="about-copy reveal" data-delay="1">
+          <p>My focus is on strengthening Data Structures and Algorithms with Java while building my backend development skills with Node.js. I've worked on RESTful APIs, CRUD operations, and database-connected applications, and I'm continuing to explore cloud platforms and AI-centric development as I grow into a versatile software engineer.</p>
+          <div class="focus-list">
+            <div class="focus-item"><span class="focus-number">A</span><div><strong>Problem solving</strong><span>Java · Data structures · Algorithms</span></div></div>
+            <div class="focus-item"><span class="focus-number">B</span><div><strong>Backend systems</strong><span>REST APIs · Modular code · Databases</span></div></div>
+            <div class="focus-item"><span class="focus-number">C</span><div><strong>Development workflow</strong><span>Git · GitHub · Deployment basics</span></div></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="about" aria-labelledby="about-title">
-      <div class="shell">
-        <div class="section-heading">
-          <p class="section-kicker">01 / About</p>
-          <div>
-            <h2 id="about-title">Learning by building.</h2>
-            <p class="section-intro">My focus is on strengthening Data Structures and Algorithms with Java while building my backend development skills with Node.js. I’ve worked on RESTful APIs, CRUD operations, and database-connected applications, and I’m continuing to explore cloud platforms and AI-centric development as I grow into a versatile software engineer.</p>
-          </div>
-        </div>
-        <div class="about-bottom">
-          <div class="about-note"><strong>Problem solving</strong><span>Java · Data structures · Algorithms</span></div>
-          <div class="about-note"><strong>Backend systems</strong><span>REST APIs · Modular code · Databases</span></div>
-          <div class="about-note"><strong>Development workflow</strong><span>Git · GitHub · Deployment basics</span></div>
-        </div>
+    <section class="section shell skills-section" id="skills" aria-labelledby="skills-title">
+      <div class="section-heading reveal">
+        <p class="section-index">02 / SKILLS</p><h2 id="skills-title">Tools I work <span>with.</span></h2>
+        <p class="section-intro">A snapshot of the languages, frameworks, databases, and tools I've worked with or studied.</p>
+      </div>
+      <div class="skills-grid">
+        <article class="skill-card reveal"><span class="skill-num">01</span><h3>Languages</h3><div class="skill-tags"><span>Java</span><span>JavaScript</span><span>C</span><span>Python · basics</span></div></article>
+        <article class="skill-card reveal" data-delay="1"><span class="skill-num">02</span><h3>Backend</h3><div class="skill-tags"><span>Node.js</span><span>Express.js</span><span>RESTful APIs</span><span>Modular design</span></div></article>
+        <article class="skill-card reveal" data-delay="2"><span class="skill-num">03</span><h3>Frontend</h3><div class="skill-tags"><span>React.js</span><span>HTML5</span><span>CSS3</span><span>Responsive design</span></div></article>
+        <article class="skill-card reveal"><span class="skill-num">04</span><h3>Data</h3><div class="skill-tags"><span>MongoDB</span><span>SQL</span><span>Firebase Realtime DB</span></div></article>
+        <article class="skill-card reveal" data-delay="1"><span class="skill-num">05</span><h3>Tools & platforms</h3><div class="skill-tags"><span>Git</span><span>GitHub</span><span>Netlify</span><span>VS Code</span></div></article>
+        <article class="skill-card reveal" data-delay="2"><span class="skill-num">06</span><h3>Cloud & AI learning</h3><div class="skill-tags"><span>Oracle Cloud Infrastructure</span><span>Google Vertex AI Prompt Design</span></div></article>
       </div>
     </section>
 
-    <section class="section" id="skills" aria-labelledby="skills-title">
-      <div class="shell">
-        <div class="section-heading">
-          <p class="section-kicker">02 / Skills</p>
-          <div><h2 id="skills-title">Tools I work with.</h2><p class="section-intro">A snapshot of the languages, frameworks, databases, and tools I’ve worked with or studied.</p></div>
-        </div>
-        <div class="skills-layout">
-          <article class="skill-group"><h3>Languages</h3><div class="skill-items"><span>Java</span><span>JavaScript</span><span>C</span><span>Python · basics</span></div></article>
-          <article class="skill-group"><h3>Backend</h3><div class="skill-items"><span>Node.js</span><span>Express.js</span><span>RESTful APIs</span><span>Modular design</span></div></article>
-          <article class="skill-group"><h3>Frontend</h3><div class="skill-items"><span>React.js</span><span>HTML5</span><span>CSS3</span><span>Responsive design</span></div></article>
-          <article class="skill-group"><h3>Data</h3><div class="skill-items"><span>MongoDB</span><span>SQL</span><span>Firebase Realtime DB</span></div></article>
-          <article class="skill-group"><h3>Tools &amp; platforms</h3><div class="skill-items"><span>Git</span><span>GitHub</span><span>Netlify</span><span>VS Code</span></div></article>
-          <article class="skill-group"><h3>Cloud &amp; AI learning</h3><div class="skill-items"><span>Oracle Cloud Infrastructure</span><span>Google Vertex AI Prompt Design</span></div></article>
-        </div>
+    <section class="section shell projects-section" id="projects" aria-labelledby="projects-title">
+      <div class="section-heading reveal">
+        <p class="section-index">03 / PROJECTS</p><h2 id="projects-title">Selected <span>work.</span></h2>
+        <p class="section-intro">A selection of development and learning experiences. Project links can be added as public repositories or live demos become available.</p>
+      </div>
+      <div class="projects-grid">
+        <article class="project-card reveal">
+          <div class="project-topline"><span>PROJECT / 01</span><span class="project-mark" aria-hidden="true">↗</span></div>
+          <h3>Library Hub <span>(API System)</span></h3>
+          <p>A RESTful backend architecture for a bookstore, with a clean code structure and CRUD operations for retrieving, updating, and managing book records.</p>
+          <div class="project-tags"><span>Node.js</span><span>Express.js</span><span>REST API</span></div>
+        </article>
+        <article class="project-card reveal" data-delay="1">
+          <div class="project-topline"><span>PROJECT / 02</span><span class="project-mark" aria-hidden="true">↗</span></div>
+          <h3>Real-Time OTP System</h3>
+          <p>A web application using Firebase to generate and validate 4-digit OTPs, with a single-click verification workflow and Firebase Realtime Database integration.</p>
+          <div class="project-tags"><span>Firebase Realtime DB</span><span>Authentication</span></div>
+        </article>
+        <article class="project-card reveal">
+          <div class="project-topline"><span>EXPERIENCE / 03</span><span class="project-mark" aria-hidden="true">↗</span></div>
+          <h3>SkillDzire Internship</h3>
+          <p>Built responsive web applications during a front-end development internship and practiced Git/GitHub workflows, including branching, pull requests, and deployment.</p>
+          <div class="project-tags"><span>HTML / CSS</span><span>JavaScript</span><span>Git</span></div>
+        </article>
+        <article class="project-card reveal" data-delay="1">
+          <div class="project-topline"><span>SIMULATION / 04</span><span class="project-mark" aria-hidden="true">↗</span></div>
+          <h3>Deloitte Data Simulation</h3>
+          <p>Completed a hands-on data analytics job simulation involving practical data-handling tasks, alongside SQL query practice and a HackerRank SQL certification.</p>
+          <div class="project-tags"><span>Data analytics</span><span>SQL</span><span>Problem solving</span></div>
+        </article>
       </div>
     </section>
 
-    <section class="section" id="projects" aria-labelledby="projects-title">
-      <div class="shell">
-        <div class="section-heading">
-          <p class="section-kicker">03 / Projects</p>
-          <div><h2 id="projects-title">Selected work.</h2><p class="section-intro">A selection of development and learning experiences. Project links can be added as public repositories or live demos become available.</p></div>
+    <section class="contact-section" id="contact" aria-labelledby="contact-title">
+      <div class="shell contact-inner">
+        <div class="contact-copy reveal">
+          <p class="section-index">04 / CONTACT</p><h2 id="contact-title">Let's make<br><span>something useful.</span></h2>
+          <p>I'm interested in internships, collaborative projects, and junior software development opportunities. For a professional conversation, feel free to reach out by email or connect through the profiles below.</p>
+          <a class="button button-primary contact-email" href="mailto:itsme.kundan.prasad.yadav@gmail.com">Email me <span aria-hidden="true">↗</span></a>
         </div>
-        <div class="projects-list">
-          <article class="project">
-            <span class="project-number">01</span><div><h3>Library Hub (API System)</h3><p>A RESTful backend architecture for a bookstore, with a clean code structure and CRUD operations for retrieving, updating, and managing book records.</p></div>
-            <div class="project-tech" aria-label="Technologies"><span>Node.js</span><span>Express.js</span><span>REST API</span></div>
-          </article>
-          <article class="project">
-            <span class="project-number">02</span><div><h3>Real-Time OTP System</h3><p>A web application using Firebase to generate and validate 4-digit OTPs, with a single-click verification workflow and Firebase Realtime Database integration.</p></div>
-            <div class="project-tech" aria-label="Technologies"><span>Firebase</span><span>Realtime DB</span><span>Authentication</span></div>
-          </article>
-          <article class="project">
-            <span class="project-number">03</span><div><h3>SkillDzire Internship</h3><p>Built responsive web applications during a front-end development internship and practiced Git/GitHub workflows, including branching, pull requests, and deployment.</p></div>
-            <div class="project-tech" aria-label="Technologies"><span>HTML/CSS</span><span>JavaScript</span><span>Git</span></div>
-          </article>
-          <article class="project">
-            <span class="project-number">04</span><div><h3>Deloitte Data Simulation</h3><p>Completed a hands-on data analytics job simulation involving practical data-handling tasks, alongside SQL query practice and a HackerRank SQL certification.</p></div>
-            <div class="project-tech" aria-label="Topics"><span>Data analytics</span><span>SQL</span><span>Problem solving</span></div>
-          </article>
+        <div class="contact-panel reveal" data-delay="1">
+          <div class="panel-topline"><span>START A CONVERSATION</span><span class="status-dot" aria-hidden="true"></span></div>
+          <form id="contact-form">
+            <label for="name">Your name</label><input id="name" name="name" autocomplete="name" placeholder="Name" required>
+            <label for="email">Your email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <label for="message">Message</label><textarea id="message" name="message" rows="4" placeholder="What would you like to build?" required></textarea>
+            <button class="button button-primary form-submit" type="submit">Prepare email <span aria-hidden="true">↗</span></button>
+            <p class="form-note">This opens your default email application with the message prepared. The form does not send data to a server.</p>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
         </div>
       </div>
-    </section>
-
-    <section class="section" id="contact" aria-labelledby="contact-title">
-      <div class="shell">
-        <div class="section-heading">
-          <p class="section-kicker">04 / Contact</p>
-          <div><h2 id="contact-title">Let’s connect.</h2><p class="contact-lead">I’m interested in internships, collaborative projects, and junior software development opportunities. For a professional conversation, feel free to reach out by email or connect through the profiles below.</p></div>
-        </div>
-        <div class="contact-grid">
-          <div>
-            <a class="button button-primary" href="mailto:itsme.kundan.prasad.yadav@gmail.com">Email me <span class="arrow" aria-hidden="true">↗</span></a>
-            <form class="contact-form" id="contact-form">
-              <div class="form-row">
-                <div><label for="name">Your name</label><input id="name" name="name" autocomplete="name" placeholder="Name" required></div>
-                <div><label for="email">Your email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></div>
-              </div>
-              <div><label for="message">Message</label><textarea id="message" name="message" placeholder="How would you like to collaborate?" required></textarea></div>
-              <button class="button button-secondary" type="submit">Prepare email <span class="arrow" aria-hidden="true">↗</span></button>
-              <p class="form-note">This opens your default email application with the message prepared. The form does not send data to a server.</p>
-            </form>
-          </div>
-          <div class="contact-links" aria-label="Professional profiles">
-            <a class="contact-link" href="https://www.linkedin.com/in/kundan-prasad-yadav-954399283" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span aria-hidden="true">↗</span></a>
-            <a class="contact-link" href="https://github.com/ydvkundan2005" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span aria-hidden="true">↗</span></a>
-            <a class="contact-link" href="https://leetcode.com/u/ydv_kundan2005/" target="_blank" rel="noopener noreferrer"><span>LeetCode</span><span aria-hidden="true">↗</span></a>
-            <a class="contact-link" href="https://www.hackerrank.com/profile/ydv_kundan2005" target="_blank" rel="noopener noreferrer"><span>HackerRank</span><span aria-hidden="true">↗</span></a>
-            <a class="contact-link" href="https://www.codechef.com/users/ydv_kundan2005" target="_blank" rel="noopener noreferrer"><span>CodeChef</span><span aria-hidden="true">↗</span></a>
-            <a class="contact-link" href="mailto:itsme.kundan.prasad.yadav@gmail.com"><span>Email</span><span aria-hidden="true">↗</span></a>
-          </div>
+      <div class="shell social-row reveal">
+        <span class="social-label">FIND ME ELSEWHERE</span>
+        <div class="social-links">
+          <a href="https://www.linkedin.com/in/kundan-prasad-yadav-954399283" target="_blank" rel="noopener noreferrer">LinkedIn <span>↗</span></a>
+          <a href="https://github.com/ydvkundan2005" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a>
+          <a href="https://leetcode.com/u/ydv_kundan2005/" target="_blank" rel="noopener noreferrer">LeetCode <span>↗</span></a>
+          <a href="https://www.hackerrank.com/profile/ydv_kundan2005" target="_blank" rel="noopener noreferrer">HackerRank <span>↗</span></a>
+          <a href="https://www.codechef.com/users/ydv_kundan2005" target="_blank" rel="noopener noreferrer">CodeChef <span>↗</span></a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-inner"><span>© <span id="year"></span> Kundan Prasad Yadav</span><span>Designed for clarity, built for the web.</span><a href="#top">Back to top ↑</a></div>
+    <div class="shell footer-inner">
+      <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true">KY<span>.</span></span><span class="brand-copy"><strong>Kundan P. Yadav</strong><small>Made with intention.</small></span></a>
+      <span>© <span id="year"></span> Kundan Prasad Yadav</span>
+      <a class="back-to-top" href="#top">Back to top ↑</a>
+    </div>
   </footer>
-
-  <script>
-    (() => {
-      const menuButton = document.querySelector('.menu-toggle');
-      const navigation = document.querySelector('#site-navigation');
-      const contactForm = document.querySelector('#contact-form');
-
-      document.querySelector('#year').textContent = new Date().getFullYear();
-
-      menuButton.addEventListener('click', () => {
-        const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
-        menuButton.setAttribute('aria-expanded', String(!isOpen));
-        menuButton.textContent = isOpen ? 'Menu' : 'Close';
-        navigation.classList.toggle('is-open', !isOpen);
-      });
-
-      navigation.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', () => {
-          navigation.classList.remove('is-open');
-          menuButton.setAttribute('aria-expanded', 'false');
-          menuButton.textContent = 'Menu';
-        });
-      });
-
-      contactForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        if (!contactForm.reportValidity()) return;
-        const formData = new FormData(contactForm);
-        const name = String(formData.get('name') || '').trim();
-        const email = String(formData.get('email') || '').trim();
-        const message = String(formData.get('message') || '').trim();
-        const subject = `Portfolio inquiry from ${name}`;
-        const body = `Hi Kundan,\n\n${message}\n\nRegards,\n${name}\n${email}`;
-        const mailto = `mailto:itsme.kundan.prasad.yadav@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.location.href = mailto;
-      });
-    })();
-  </script>
+  <script src="./assets/js/main.js" defer></script>
+  <script type="module" src="./assets/js/scene.js"></script>
 </body>
 </html>
