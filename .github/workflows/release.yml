@@ -1,0 +1,28 @@
+name: Publish portfolio v1.0.0 release
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.head_commit.message == 'Create portfolio v1.0.0 release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create release for the redesigned portfolio
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: Portfolio v1.0.0 — Premium Minimal Redesign
+          target_commitish: 52d037b95a3529ad5e122cdb1ec6035fbd0a285b
+          generate_release_notes: true
+          body: |
+            First release of the redesigned portfolio website.
+
+            - Premium, minimalist responsive layout
+            - Updated LinkedIn profile photo
+            - Preserved the existing project, skills, résumé, and contact information
+            - Lightweight static HTML/CSS/JavaScript for GitHub Pages
