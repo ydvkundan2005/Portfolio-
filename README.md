@@ -1,41 +1,50 @@
 # Kundan Prasad Yadav — Portfolio
 
-A responsive portfolio for Kundan Prasad Yadav, a B.Tech Computer Science and Engineering student at Aditya University (Class of 2027).
+A responsive personal portfolio for a B.Tech Computer Science and Engineering student at Aditya University (Class of 2027).
 
 **Live site:** https://ydvkundan2005.github.io/Portfolio-/  
 **Repository:** https://github.com/ydvkundan2005/Portfolio-
 
+## Purpose
+
+The portfolio provides a concise introduction, technical areas, selected project summaries and professional contact links. Its content is intended to complement—not replace—the source code and implementation details in the linked repositories.
+
+## Selected public projects
+
+| Project | Focus | Source |
+|---|---|---|
+| FloatCam | Electron desktop application, WebRTC and local-network signalling | [GitHub](https://github.com/ydvkundan2005/FloatCam) |
+| LocalBridge | Kotlin Android and Swift macOS application, local file and text transfer | [GitHub](https://github.com/ydvkundan2005/LocalBridge) |
+| BloodByte | JavaScript, Firebase, geolocation and proximity-based request discovery | [GitHub](https://github.com/ydvkundan2005/BloodByte) |
+| QuietSend | Browser-based text sharing with Firebase Realtime Database | [GitHub](https://github.com/ydvkundan2005/Secure-Text-send-and-receive-by-otp-2) |
+
+Project status and limitations are documented in each repository. A project summary on the portfolio should not be interpreted as a claim that it has passed a production security or reliability audit.
+
 ## Design and implementation
 
-- Minimal dark visual system with warm editorial typography and a restrained Claude-inspired terracotta accent (#D97757).
-- Circular portrait at the start of the hero with deliberate face crop and an editorial name caption.
-- Three.js sculpture with its geometry preserved, warm terracotta lighting, wireframe details, orbital rings, fine particles, and pointer-responsive movement.
-- Native scroll reveals, reading progress, active section navigation, interactive portrait framing, and subtle editorial graphics in the About and Skills sections.
+- Responsive single-page layout with section navigation.
+- Three.js-based animated hero visual with a CSS fallback.
+- Scroll reveals, reading progress and interactive visual details.
 - Mobile navigation and reduced-motion support.
-- Semantic HTML, keyboard focus states, and descriptive image text.
+- Semantic HTML, keyboard focus states and descriptive image text.
+- Static deployment through GitHub Pages.
 
 ## Project structure
 
-- index.html
-- assets/css/styles.css
-- assets/js/main.js
-- assets/js/scene.js
-
-## Sections
-
-- **Introduction:** academic context, interests, and résumé link.
-- **About:** Java, data structures and algorithms, and backend development.
-- **Skills:** languages, backend, frontend, data, tools, and cloud/AI learning.
-- **Projects:** Library Hub API System, Real-Time OTP System, SkillDzire Internship, and Deloitte Data Simulation.
-- **Contact:** email, LinkedIn, GitHub, LeetCode, HackerRank, and CodeChef.
+- `index.html` — page content and semantic structure
+- `assets/css/styles.css` — design system and responsive styles
+- `assets/js/main.js` — navigation and interaction behavior
+- `assets/js/scene.js` — Three.js hero scene
 
 ## Run locally
 
-No build step is required. Open index.html in a browser, or run a static server:
+No build step is required. Open `index.html` in a browser, or start a local static server:
 
-    python3 -m http.server 8000
+```bash
+python3 -m http.server 8000
+```
 
-Then visit http://localhost:8000.
+Then visit `http://localhost:8000`.
 
 The 3D scene loads Three.js as an ES module from jsDelivr. If WebGL or the module cannot load, the scene area retains a CSS-based fallback illustration.
 
@@ -45,4 +54,4 @@ The contact form validates its fields and opens the visitor's default email appl
 
 ## Deployment
 
-The static site is deployed using GitHub Pages. Paths are relative to the repository root; no framework build is required.
+The static site is deployed using the GitHub Pages workflow in `.github/workflows/static.yml`. Paths are relative to the repository root; no framework build is required.
