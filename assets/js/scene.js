@@ -56,7 +56,8 @@ if (canvas && frame && visual) {
       color,
       opacity,
       tilt,
-      spin,
+      precessionAxis,
+      precessionSpeed,
       metallic = false
     }) => {
       const ellipse = new THREE.EllipseCurve(
@@ -100,39 +101,44 @@ if (canvas && frame && visual) {
         curve,
         geometry,
         material,
-        baseRotationZ: tilt[2],
-        spin
+        baseQuaternion: pivot.quaternion.clone(),
+        precessionAxis: new THREE.Vector3(...precessionAxis).normalize(),
+        precessionSpeed,
+        animatedQuaternion: new THREE.Quaternion()
       };
     };
 
-    // Five crossing tracks: two diagonals added to the original three.
-    // Their unequal ellipse proportions and separate plane inclinations are
-    // intentional; no two tracks share the same circular silhouette.
+    // Four carefully spaced elliptical tracks. Their planes cross at
+    // different angles, with one warm focal orbit and three quieter supports.
     const orbitTracks = [
       createOrbitTrack({
-        radiusX: 2.12, radiusY: 1.04, tubeRadius: 0.013,
-        color: 0xd97757, opacity: 0.94,
-        tilt: [1.02, 0.28, -0.18], spin: 0.0065, metallic: true
+        radiusX: 2.06, radiusY: 1.16, tubeRadius: 0.013,
+        color: 0xd97757, opacity: 0.9,
+        tilt: [1.04, 0.34, -0.26],
+        precessionAxis: [0.35, 1, 0.18],
+        precessionSpeed: 0.24,
+        metallic: true
       }),
       createOrbitTrack({
-        radiusX: 2.18, radiusY: 1.12, tubeRadius: 0.007,
-        color: 0xe8e6dc, opacity: 0.38,
-        tilt: [0.48, 1.08, 0.68], spin: -0.0048
+        radiusX: 2.2, radiusY: 1.38, tubeRadius: 0.0065,
+        color: 0xe8e6dc, opacity: 0.34,
+        tilt: [0.72, -0.94, 0.84],
+        precessionAxis: [-0.82, 0.28, 0.5],
+        precessionSpeed: -0.17
       }),
       createOrbitTrack({
-        radiusX: 1.94, radiusY: 1.05, tubeRadius: 0.0055,
-        color: 0xc4a484, opacity: 0.3,
-        tilt: [0.96, -0.82, -0.72], spin: 0.0038
+        radiusX: 1.94, radiusY: 1.12, tubeRadius: 0.005,
+        color: 0xc4a484, opacity: 0.24,
+        tilt: [1.34, 0.66, -0.92],
+        precessionAxis: [0.6, 0.55, -0.72],
+        precessionSpeed: 0.14
       }),
       createOrbitTrack({
-        radiusX: 2.08, radiusY: 0.9, tubeRadius: 0.0045,
-        color: 0xfaf9f5, opacity: 0.2,
-        tilt: [0.72, -0.9, 1.18], spin: -0.0032
-      }),
-      createOrbitTrack({
-        radiusX: 1.82, radiusY: 1.02, tubeRadius: 0.0045,
-        color: 0xd97757, opacity: 0.2,
-        tilt: [1.18, 0.52, -1.25], spin: 0.0051
+        radiusX: 2.12, radiusY: 0.84, tubeRadius: 0.004,
+        color: 0xfaf9f5, opacity: 0.18,
+        tilt: [0.86, 1.12, 1.24],
+        precessionAxis: [-0.35, 0.72, 0.6],
+        precessionSpeed: -0.12
       })
     ];
 
@@ -182,7 +188,7 @@ if (canvas && frame && visual) {
       camera.aspect = aspect;
 
       // Fit the outer orbital ring inside the camera frustum at every container ratio.
-      const framingRadius = 2.22;
+      const framingRadius = 2.42;
       const halfFovRadians = THREE.MathUtils.degToRad(camera.fov / 2);
       const requiredDistance = (framingRadius / Math.tan(halfFovRadians)) * Math.max(1, 1 / aspect);
       camera.position.set(0, 0, Math.max(6.8, requiredDistance * 1.08));
@@ -219,20 +225,22 @@ if (canvas && frame && visual) {
         sculpture.rotation.y = time * 0.17 + smoothX;
         sculpture.rotation.x = Math.sin(time * 0.28) * 0.09 + smoothY - Math.min(window.scrollY || 0, 700) / 700 * 0.12;
         sculpture.rotation.z = Math.sin(time * 0.18) * 0.035;
-        // Keep the viewing angle almost stable: each path stays diagonally
-        // inclined instead of periodically turning face-on like a flat circle.
-        orbitSystem.rotation.x = Math.sin(time * 0.09) * 0.012;
-        orbitSystem.rotation.y = Math.sin(time * 0.075) * 0.022;
-        orbitSystem.rotation.z = Math.sin(time * 0.06) * 0.01;
-
+        // Precess each complete orbital plane around its own world-space axis.
+        // Unlike rotating an ellipse around its own normal, this changes the
+        // visible angle of the track continuously and keeps the crossings alive.
         orbitTracks.forEach((track) => {
-          track.pivot.rotation.z = track.baseRotationZ + time * track.spin;
+          track.animatedQuaternion.setFromAxisAngle(
+            track.precessionAxis,
+            time * track.precessionSpeed
+          );
+          track.pivot.quaternion.copy(track.animatedQuaternion)
+            .multiply(track.baseQuaternion);
         });
 
         points.rotation.y = -time * 0.018;
 
-        // One calm revolution follows the exact elliptical spline.
-        const satelliteProgress = (time * 0.075) % 1;
+        // The marker completes a smooth lap on the focal terracotta ellipse.
+        const satelliteProgress = (time * 0.095) % 1;
         satellite.position.copy(primaryOrbit.curve.getPointAt(satelliteProgress));
       }
       renderer.render(scene, camera);
