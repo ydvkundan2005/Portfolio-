@@ -2,11 +2,11 @@
   'use strict';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const header = document.querySelector('.site-header');
-  const progressBar = document.getElementById('scroll-progress-bar');
   const menuToggle = document.getElementById('menu-toggle');
   const navigation = document.getElementById('site-nav');
   const heroVisual = document.getElementById('hero-visual');
-  document.getElementById('year').textContent = String(new Date().getFullYear());
+  const yearElement = document.getElementById('year');
+  if (yearElement) yearElement.textContent = String(new Date().getFullYear());
 
   const revealItems = Array.from(document.querySelectorAll('.reveal'));
   revealItems.forEach((item) => {
@@ -30,9 +30,7 @@
   let scrollTicking = false;
   const updateScrollState = () => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollRange = document.documentElement.scrollHeight - window.innerHeight;
-    header.classList.toggle('is-scrolled', scrollTop > 8);
-    progressBar.style.width = (scrollRange > 0 ? (scrollTop / scrollRange) * 100 : 0) + '%';
+    if (header) header.classList.toggle('is-scrolled', scrollTop > 8);
     if (heroVisual && !reducedMotion.matches) {
       heroVisual.style.setProperty('--scroll-offset', (Math.min(scrollTop, 500) * 0.035).toFixed(1) + 'px');
     }
@@ -84,20 +82,6 @@
       });
     }, { rootMargin: '-35% 0px -55% 0px' });
     document.querySelectorAll('main section[id]').forEach((section) => sectionObserver.observe(section));
-  }
-
-  if (heroVisual && !reducedMotion.matches && window.matchMedia('(pointer: fine)').matches) {
-    const portrait = heroVisual.querySelector('.portrait-card');
-    heroVisual.addEventListener('pointermove', (event) => {
-      if (!portrait || window.innerWidth < 741) return;
-      const bounds = heroVisual.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-      portrait.style.transform = 'perspective(900px) rotate(-1deg) rotateX(' + (y * -1.6).toFixed(2) + 'deg) rotateY(' + (x * 1.6).toFixed(2) + 'deg) translateY(-2px)';
-    });
-    heroVisual.addEventListener('pointerleave', () => {
-      if (portrait) portrait.style.transform = '';
-    });
   }
 
   const contactForm = document.getElementById('contact-form');

@@ -23,8 +23,9 @@ Project status and limitations are documented in each repository. A project summ
 ## Design and implementation
 
 - Responsive single-page layout with section navigation.
-- Three.js-based animated hero visual with a CSS fallback.
-- Scroll reveals, reading progress and interactive visual details.
+- Three.js-based animated hero visual with responsive camera framing and a CSS fallback.
+- Scroll-triggered section reveals and subtle interactive details.
+- Distinct SVG illustrations for the About and Skills sections.
 - Mobile navigation and reduced-motion support.
 - Semantic HTML, keyboard focus states and descriptive image text.
 - Static deployment through GitHub Pages.
@@ -35,6 +36,7 @@ Project status and limitations are documented in each repository. A project summ
 - `assets/css/styles.css` — design system and responsive styles
 - `assets/js/main.js` — navigation and interaction behavior
 - `assets/js/scene.js` — Three.js hero scene
+- `assets/images/` — section illustrations
 
 ## Run locally
 
@@ -46,7 +48,7 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
-The 3D scene loads Three.js as an ES module from jsDelivr. If WebGL or the module cannot load, the scene area retains a CSS-based fallback illustration.
+The 3D scene loads Three.js as an ES module from jsDelivr. Its camera is resized to the scene container so the primary sculpture and orbital rings remain in view as the layout changes. If WebGL or the module cannot load, the scene area retains a CSS-based fallback illustration.
 
 ## Contact form
 

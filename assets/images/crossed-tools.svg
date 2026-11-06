@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" role="img" aria-labelledby="title desc">
+<title id="title">Crossed developer tools</title><desc id="desc">A minimalist crossed screwdriver and wrench illustration.</desc>
+<defs><linearGradient id="toolMetal" x1="60" y1="35" x2="300" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#FAF9F5"/><stop offset=".55" stop-color="#C4A484"/><stop offset="1" stop-color="#D97757"/></linearGradient></defs>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M82 204L250 38" stroke="url(#toolMetal)" stroke-width="14"/><path d="M77 211l-13-13m22-5l-13-13" stroke="#FAF9F5" stroke-opacity=".75" stroke-width="2"/>
+<path d="M228 42c10-18 32-25 51-16l-20 21 23 23 21-20c8 19 1 41-17 52-17 10-38 7-51-8" stroke="#FAF9F5" stroke-width="10"/><path d="M228 42c10-18 32-25 51-16l-20 21 23 23 21-20" stroke="#D97757" stroke-width="2.2"/>
+<g transform="rotate(43 113 59)"><rect x="91" y="19" width="44" height="75" rx="17" fill="#151512" stroke="url(#toolMetal)" stroke-width="7"/><path d="M113 94v113" stroke="url(#toolMetal)" stroke-width="8"/><path d="M113 207l-7 13h14z" fill="#D97757" stroke="#D97757" stroke-width="2"/><path d="M101 35h24M101 46h24" stroke="#C4A484" stroke-width="2" stroke-opacity=".75"/></g>
+<circle cx="180" cy="121" r="7" fill="#D97757" stroke="#090a08" stroke-width="3"/><path d="M180 106v-11m0 52v-11m-15-15h-11m52 0h-11" stroke="#C4A484" stroke-width="1.5" stroke-opacity=".65"/></g></svg>

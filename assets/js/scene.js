@@ -91,10 +91,18 @@ if (canvas && frame && visual) {
     const clock = new THREE.Clock();
     const resize = () => {
       const rect = frame.getBoundingClientRect();
-      const width = Math.max(1, rect.width);
-      const height = Math.max(1, rect.height);
+      const width = Math.max(1, Math.round(rect.width));
+      const height = Math.max(1, Math.round(rect.height));
+      const aspect = width / height;
+
       renderer.setSize(width, height, false);
-      camera.aspect = width / height;
+      camera.aspect = aspect;
+
+      // Fit the outer orbital ring inside the camera frustum at every container ratio.
+      const framingRadius = 2.08;
+      const halfFovRadians = THREE.MathUtils.degToRad(camera.fov / 2);
+      const requiredDistance = (framingRadius / Math.tan(halfFovRadians)) * Math.max(1, 1 / aspect);
+      camera.position.set(0, 0, Math.max(6.8, requiredDistance * 1.08));
       camera.updateProjectionMatrix();
     };
     resize();
@@ -150,8 +158,21 @@ if (canvas && frame && visual) {
     window.addEventListener('pagehide', () => {
       if (rafId) window.cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
-      coreGeometry.dispose(); coreMaterial.dispose(); wireGeometry.dispose(); wireMaterial.dispose();
-      pointGeometry.dispose(); renderer.dispose();
+      coreGeometry.dispose();
+      coreMaterial.dispose();
+      wireGeometry.dispose();
+      wireMaterial.dispose();
+      ringA.geometry.dispose();
+      ringMaterial.dispose();
+      ringB.geometry.dispose();
+      ringB.material.dispose();
+      ringC.geometry.dispose();
+      ringC.material.dispose();
+      pointGeometry.dispose();
+      points.material.dispose();
+      satellite.geometry.dispose();
+      satellite.material.dispose();
+      renderer.dispose();
     }, { once: true });
   } catch (error) {
     console.warn('The 3D scene could not be started:', error);
