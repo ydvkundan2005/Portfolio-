@@ -45,32 +45,96 @@ if (canvas && frame && visual) {
     const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xd97757, wireframe: true, transparent: true, opacity: 0.16 });
     sculpture.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
-    const ringMaterial = new THREE.MeshStandardMaterial({
-      color: 0xd97757, metalness: 0.66, roughness: 0.35, emissive: 0x4b2017, emissiveIntensity: 0.22
-    });
-    // Three elliptical tracks, deliberately inclined on different axes.
-    // Their different planes create the crossing, armillary-sphere silhouette
-    // instead of a set of flat concentric circles.
-    const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.014, 10, 220), ringMaterial);
-    ringA.rotation.set(1.1, 0.14, 0.28);
-    ringA.scale.set(1.1, 0.8, 1);
-    orbitSystem.add(ringA);
+    // Build genuine elliptical paths instead of scaling circular torus meshes.
+    // Every path has its own tilted plane and slow local precession. The planes
+    // remain diagonal while their ellipse axes drift, creating visible crossings
+    // without letting the whole system rotate into a set of flat-looking circles.
+    const createOrbitTrack = ({
+      radiusX,
+      radiusY,
+      tubeRadius,
+      color,
+      opacity,
+      tilt,
+      spin,
+      metallic = false
+    }) => {
+      const ellipse = new THREE.EllipseCurve(
+        0, 0, radiusX, radiusY, 0, Math.PI * 2, false, 0
+      );
+      const points = ellipse.getPoints(360).slice(0, -1).map(
+        (point) => new THREE.Vector3(point.x, point.y, 0)
+      );
+      const curve = new THREE.CatmullRomCurve3(points, true, 'centripetal');
 
-    const ringBMaterial = new THREE.MeshBasicMaterial({
-      color: 0xe8e6dc, transparent: true, opacity: 0.3, depthWrite: false
-    });
-    const ringB = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.007, 6, 220), ringBMaterial);
-    ringB.rotation.set(0.42, 1.16, -0.62);
-    ringB.scale.set(1, 0.72, 1);
-    orbitSystem.add(ringB);
+      const geometry = new THREE.TubeGeometry(curve, 360, tubeRadius, 8, true);
+      const material = metallic
+        ? new THREE.MeshStandardMaterial({
+            color,
+            metalness: 0.72,
+            roughness: 0.32,
+            emissive: 0x4b2017,
+            emissiveIntensity: 0.16,
+            transparent: true,
+            opacity,
+            depthWrite: false
+          })
+        : new THREE.MeshBasicMaterial({
+            color,
+            transparent: true,
+            opacity,
+            depthWrite: false
+          });
 
-    const ringCMaterial = new THREE.MeshBasicMaterial({
-      color: 0xc4a484, transparent: true, opacity: 0.2, depthWrite: false
-    });
-    const ringC = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.005, 5, 200), ringCMaterial);
-    ringC.rotation.set(1.42, -0.9, 0.82);
-    ringC.scale.set(1.14, 0.86, 1);
-    orbitSystem.add(ringC);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.renderOrder = 2;
+
+      const pivot = new THREE.Group();
+      pivot.rotation.order = 'XYZ';
+      pivot.rotation.set(tilt[0], tilt[1], tilt[2]);
+      pivot.add(mesh);
+      orbitSystem.add(pivot);
+
+      return {
+        pivot,
+        curve,
+        geometry,
+        material,
+        baseRotationZ: tilt[2],
+        spin
+      };
+    };
+
+    // Five crossing tracks: two diagonals added to the original three.
+    // Their unequal ellipse proportions and separate plane inclinations are
+    // intentional; no two tracks share the same circular silhouette.
+    const orbitTracks = [
+      createOrbitTrack({
+        radiusX: 2.12, radiusY: 1.04, tubeRadius: 0.013,
+        color: 0xd97757, opacity: 0.94,
+        tilt: [1.02, 0.28, -0.18], spin: 0.0065, metallic: true
+      }),
+      createOrbitTrack({
+        radiusX: 2.18, radiusY: 1.12, tubeRadius: 0.007,
+        color: 0xe8e6dc, opacity: 0.38,
+        tilt: [0.48, 1.08, 0.68], spin: -0.0048
+      }),
+      createOrbitTrack({
+        radiusX: 1.94, radiusY: 1.05, tubeRadius: 0.0055,
+        color: 0xc4a484, opacity: 0.3,
+        tilt: [0.96, -0.82, -0.72], spin: 0.0038
+      }),
+      createOrbitTrack({
+        radiusX: 2.08, radiusY: 0.9, tubeRadius: 0.0045,
+        color: 0xfaf9f5, opacity: 0.2,
+        tilt: [0.72, -0.9, 1.18], spin: -0.0032
+      }),
+      createOrbitTrack({
+        radiusX: 1.82, radiusY: 1.02, tubeRadius: 0.0045,
+        color: 0xd97757, opacity: 0.2,
+        tilt: [1.18, 0.52, -1.25], spin: 0.0051
+      })
+    ];
 
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
@@ -95,10 +159,11 @@ if (canvas && frame && visual) {
         color: 0xd97757, emissive: 0x9d4e34, emissiveIntensity: 0.8, metalness: 0.25, roughness: 0.3
       })
     );
-    // The satellite is parented to the primary terracotta orbit. Its path
-    // therefore stays on the visible track as the orbit rig precesses.
-    ringA.add(satellite);
-    satellite.position.set(1.62, 0, 0);
+    // Follow the actual curve of the main terracotta ellipse, not an unrelated
+    // circular 3D path. Parenting keeps the marker locked to that moving track.
+    const primaryOrbit = orbitTracks[0];
+    primaryOrbit.pivot.add(satellite);
+    satellite.position.copy(primaryOrbit.curve.getPointAt(0));
 
     let pointerX = 0;
     let pointerY = 0;
@@ -117,7 +182,7 @@ if (canvas && frame && visual) {
       camera.aspect = aspect;
 
       // Fit the outer orbital ring inside the camera frustum at every container ratio.
-      const framingRadius = 2.18;
+      const framingRadius = 2.22;
       const halfFovRadians = THREE.MathUtils.degToRad(camera.fov / 2);
       const requiredDistance = (framingRadius / Math.tan(halfFovRadians)) * Math.max(1, 1 / aspect);
       camera.position.set(0, 0, Math.max(6.8, requiredDistance * 1.08));
@@ -154,16 +219,21 @@ if (canvas && frame && visual) {
         sculpture.rotation.y = time * 0.17 + smoothX;
         sculpture.rotation.x = Math.sin(time * 0.28) * 0.09 + smoothY - Math.min(window.scrollY || 0, 700) / 700 * 0.12;
         sculpture.rotation.z = Math.sin(time * 0.18) * 0.035;
-        // Slow whole-system drift plus a restrained precession on each track.
-        // The different inclinations remain visible throughout the rotation.
-        orbitSystem.rotation.y = time * 0.11;
-        orbitSystem.rotation.z = Math.sin(time * 0.19) * 0.055;
-        ringA.rotation.z = 0.28 + Math.sin(time * 0.17) * 0.045;
-        ringB.rotation.x = 0.42 + Math.sin(time * 0.14 + 1.1) * 0.04;
-        ringC.rotation.y = -0.9 + Math.sin(time * 0.12 + 2.2) * 0.035;
+        // Keep the viewing angle almost stable: each path stays diagonally
+        // inclined instead of periodically turning face-on like a flat circle.
+        orbitSystem.rotation.x = Math.sin(time * 0.09) * 0.012;
+        orbitSystem.rotation.y = Math.sin(time * 0.075) * 0.022;
+        orbitSystem.rotation.z = Math.sin(time * 0.06) * 0.01;
+
+        orbitTracks.forEach((track) => {
+          track.pivot.rotation.z = track.baseRotationZ + time * track.spin;
+        });
+
         points.rotation.y = -time * 0.018;
-        const satelliteAngle = time * 0.58;
-        satellite.position.set(Math.cos(satelliteAngle) * 1.62, Math.sin(satelliteAngle) * 1.62, 0);
+
+        // One calm revolution follows the exact elliptical spline.
+        const satelliteProgress = (time * 0.075) % 1;
+        satellite.position.copy(primaryOrbit.curve.getPointAt(satelliteProgress));
       }
       renderer.render(scene, camera);
     };
@@ -185,12 +255,10 @@ if (canvas && frame && visual) {
       coreMaterial.dispose();
       wireGeometry.dispose();
       wireMaterial.dispose();
-      ringA.geometry.dispose();
-      ringMaterial.dispose();
-      ringB.geometry.dispose();
-      ringBMaterial.dispose();
-      ringC.geometry.dispose();
-      ringCMaterial.dispose();
+      orbitTracks.forEach((track) => {
+        track.geometry.dispose();
+        track.material.dispose();
+      });
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
