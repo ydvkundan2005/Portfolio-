@@ -104,6 +104,48 @@ if (canvas && frame && visual) {
     const animateRingA = createOrbitAnimator(ringAPivot, 0.145, 0);
     const animateRingB = createOrbitAnimator(ringBPivot, -0.103, 0.92);
 
+    // Third track: a fine ivory orbit, deliberately placed between the copper
+    // inner track and the existing silver-grey outer track.
+    const ringCMaterial = new THREE.MeshBasicMaterial({
+      color: 0xfaf9f5,
+      transparent: true,
+      opacity: 0.3,
+      depthTest: true,
+      depthWrite: false
+    });
+    const ringC = new THREE.Mesh(
+      new THREE.TorusGeometry(1.96, 0.005, 6, 220),
+      ringCMaterial
+    );
+    ringC.renderOrder = 2;
+
+    const ringCPivot = new THREE.Group();
+    ringCPivot.rotation.set(0.76, 0.88, -0.66);
+    ringCPivot.add(ringC);
+    orbitSystem.add(ringCPivot);
+    const animateRingC = createOrbitAnimator(ringCPivot, 0.082, 1.35);
+
+    // Fourth track: a quiet graphite-grey outer orbit. Its larger radius and
+    // steeper diagonal plane keep it visually distinct from the existing grey.
+    const ringDMaterial = new THREE.MeshBasicMaterial({
+      color: 0xb8b7b0,
+      transparent: true,
+      opacity: 0.24,
+      depthTest: true,
+      depthWrite: false
+    });
+    const ringD = new THREE.Mesh(
+      new THREE.TorusGeometry(2.32, 0.005, 6, 240),
+      ringDMaterial
+    );
+    ringD.renderOrder = 2;
+
+    const ringDPivot = new THREE.Group();
+    ringDPivot.rotation.set(1.12, -0.42, 0.94);
+    ringDPivot.add(ringD);
+    orbitSystem.add(ringDPivot);
+    const animateRingD = createOrbitAnimator(ringDPivot, -0.061, 2.2);
+
 
 
 
@@ -191,10 +233,13 @@ if (canvas && frame && visual) {
         sculpture.rotation.y = time * 0.17 + smoothX;
         sculpture.rotation.x = Math.sin(time * 0.28) * 0.09 + smoothY - Math.min(window.scrollY || 0, 700) / 700 * 0.12;
         sculpture.rotation.z = Math.sin(time * 0.18) * 0.035;
-        // Two deliberate, continuous orbital paths. Their radii and phase
-        // speeds differ, while each retains its original tilted plane.
+        // Four continuous paths with staggered radii, inclinations, phases and
+        // speeds. Each keeps its diagonal plane and uses absolute-time motion,
+        // so the rings never accumulate angular drift.
         animateRingA(time);
         animateRingB(time);
+        animateRingC(time);
+        animateRingD(time);
 
         points.rotation.y = -time * 0.018;
 
@@ -229,6 +274,10 @@ if (canvas && frame && visual) {
       ringMaterial.dispose();
       ringB.geometry.dispose();
       ringBMaterial.dispose();
+      ringC.geometry.dispose();
+      ringCMaterial.dispose();
+      ringD.geometry.dispose();
+      ringDMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
