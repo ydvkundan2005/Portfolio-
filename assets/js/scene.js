@@ -29,6 +29,9 @@ if (canvas && frame && visual) {
 
     const sculpture = new THREE.Group();
     scene.add(sculpture);
+
+    const orbitSystem = new THREE.Group();
+    scene.add(orbitSystem);
     const coreGeometry = new THREE.IcosahedronGeometry(1.38, 2);
     const coreMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xe8d3c9, metalness: 0.78, roughness: 0.24, clearcoat: 1,
@@ -60,7 +63,7 @@ if (canvas && frame && visual) {
     const ringAPivot = new THREE.Group();
     ringAPivot.rotation.set(0.98, 0.15, 0.46);
     ringAPivot.add(ringA);
-    sculpture.add(ringAPivot);
+    orbitSystem.add(ringAPivot);
 
     const ringBMaterial = new THREE.MeshBasicMaterial({
       color: 0xc9c8c1,
@@ -77,7 +80,7 @@ if (canvas && frame && visual) {
     const ringBPivot = new THREE.Group();
     ringBPivot.rotation.set(1.3, -0.7, -0.23);
     ringBPivot.add(ringB);
-    sculpture.add(ringBPivot);
+    orbitSystem.add(ringBPivot);
 
     const ringCMaterial = new THREE.MeshBasicMaterial({
       color: 0xfaf9f5,
@@ -94,7 +97,7 @@ if (canvas && frame && visual) {
     const ringCPivot = new THREE.Group();
     ringCPivot.rotation.set(0.3, 0.65, 1.05);
     ringCPivot.add(ringC);
-    sculpture.add(ringCPivot);
+    orbitSystem.add(ringCPivot);
 
     // Reusable quaternions avoid per-frame allocations. These axes are not
     // parallel to either orbit's normal, so each complete ellipse visibly
@@ -119,7 +122,6 @@ if (canvas && frame && visual) {
     const animateRingA = createOrbitAnimator(ringAPivot, 0.17);
     const animateRingB = createOrbitAnimator(ringBPivot, -0.135);
     const animateRingC = createOrbitAnimator(ringCPivot, 0.155);
-    const animateRingD = createOrbitAnimator(ringDPivot, -0.105);
 
     // Fourth orbit: a restrained silver-grey diagonal track.
     // The three supplied/original tracks above remain intact.
@@ -138,10 +140,9 @@ if (canvas && frame && visual) {
     const ringDPivot = new THREE.Group();
     ringDPivot.rotation.set(0.82, 1.04, -0.92);
     ringDPivot.add(ringD);
-    sculpture.add(ringDPivot);
+    orbitSystem.add(ringDPivot);
 
-    const ringDSpin = new THREE.Quaternion();
-    const ringDAxis = new THREE.Vector3(0.58, -0.62, 0.52).normalize();
+    const animateRingD = createOrbitAnimator(ringDPivot, -0.105);
 
 
 
@@ -221,7 +222,7 @@ if (canvas && frame && visual) {
     const animate = () => {
       rafId = window.requestAnimationFrame(animate);
       if (!visible || document.hidden) return;
-      const delta = Math.min(clock.getDelta(), 0.05);
+      clock.getDelta();
       const time = clock.elapsedTime;
       smoothX += (pointerX - smoothX) * 0.035;
       smoothY += (pointerY - smoothY) * 0.035;
