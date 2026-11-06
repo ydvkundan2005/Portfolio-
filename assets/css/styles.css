@@ -631,3 +631,60 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     padding-bottom: 60px;
   }
 }
+
+
+/* Seamless section transitions: remove dividers and trim only inter-section spacing. */
+.section,
+.contact-section {
+  border-top: 0;
+}
+.section {
+  padding-top: clamp(48px, 5.5vw, 72px);
+  padding-bottom: clamp(48px, 5.5vw, 72px);
+}
+.projects-section {
+  padding-bottom: clamp(44px, 5vw, 70px);
+}
+.contact-inner {
+  padding-top: clamp(56px, 6vw, 78px);
+  padding-bottom: clamp(56px, 6vw, 78px);
+}
+@media (max-width: 1080px) {
+  .section {
+    padding-top: 58px;
+    padding-bottom: 58px;
+  }
+  .projects-section {
+    padding-bottom: 54px;
+  }
+  .contact-inner {
+    padding-top: 62px;
+    padding-bottom: 62px;
+  }
+}
+@media (max-width: 740px) {
+  .section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .projects-section {
+    padding-bottom: 46px;
+  }
+  .contact-inner {
+    padding-top: 54px;
+    padding-bottom: 54px;
+  }
+}
+@media (max-width: 440px) {
+  .section {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+  .projects-section {
+    padding-bottom: 40px;
+  }
+  .contact-inner {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+}
