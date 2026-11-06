@@ -55,9 +55,12 @@ if (canvas && frame && visual) {
       new THREE.TorusGeometry(1.74, 0.012, 8, 200),
       ringMaterial
     );
-    ringA.rotation.set(0.98, 0.15, 0.46);
     ringA.renderOrder = 2;
-    sculpture.add(ringA);
+
+    const ringAPivot = new THREE.Group();
+    ringAPivot.rotation.set(0.98, 0.15, 0.46);
+    ringAPivot.add(ringA);
+    sculpture.add(ringAPivot);
 
     const ringBMaterial = new THREE.MeshBasicMaterial({
       color: 0xc9c8c1,
@@ -96,10 +99,27 @@ if (canvas && frame && visual) {
     // Reusable quaternions avoid per-frame allocations. These axes are not
     // parallel to either orbit's normal, so each complete ellipse visibly
     // changes its diagonal plane instead of merely spinning invisibly in place.
-    const ringBSpin = new THREE.Quaternion();
-    const ringCSpin = new THREE.Quaternion();
-    const ringBAxis = new THREE.Vector3(0.82, 0.34, 0.46).normalize();
-    const ringCAxis = new THREE.Vector3(-0.38, 0.86, 0.34).normalize();
+    // Continuous orbital travel around the sculpture's local Z axis.
+    // Rotating the plane around this axis preserves each orbit's inclination
+    // to the viewer; its projected path stays elliptical through every cycle.
+    const orbitSpinAxis = new THREE.Vector3(0, 0, 1);
+
+    const createOrbitAnimator = (pivot, angularSpeed) => {
+      const startingPose = pivot.quaternion.clone();
+      const spin = new THREE.Quaternion();
+
+      return (time) => {
+        spin.setFromAxisAngle(orbitSpinAxis, time * angularSpeed);
+        pivot.quaternion.copy(spin).multiply(startingPose);
+      };
+    };
+
+    // Different speeds and directions keep the four tracks layered rather
+    // than moving as one rigid bundle. All start at their current visual pose.
+    const animateRingA = createOrbitAnimator(ringAPivot, 0.17);
+    const animateRingB = createOrbitAnimator(ringBPivot, -0.135);
+    const animateRingC = createOrbitAnimator(ringCPivot, 0.155);
+    const animateRingD = createOrbitAnimator(ringDPivot, -0.105);
 
     // Fourth orbit: a restrained silver-grey diagonal track.
     // The three supplied/original tracks above remain intact.
@@ -123,50 +143,9 @@ if (canvas && frame && visual) {
     const ringDSpin = new THREE.Quaternion();
     const ringDAxis = new THREE.Vector3(0.58, -0.62, 0.52).normalize();
 
-    // Fifth orbit: a clean ivory-white diagonal path, offset from the other
-    // four tracks so it adds depth without turning the composition into a knot.
-    const ringEMaterial = new THREE.MeshBasicMaterial({
-      color: 0xfaf9f5,
-      transparent: true,
-      opacity: 0.28,
-      depthWrite: false
-    });
-    const ringE = new THREE.Mesh(
-      new THREE.TorusGeometry(2.12, 0.005, 6, 220),
-      ringEMaterial
-    );
-    ringE.renderOrder = 2;
 
-    const ringEPivot = new THREE.Group();
-    ringEPivot.rotation.set(1.12, -0.48, 0.56);
-    ringEPivot.add(ringE);
-    sculpture.add(ringEPivot);
 
-    const ringESpin = new THREE.Quaternion();
-    const ringEAxis = new THREE.Vector3(-0.68, 0.3, 0.66).normalize();
 
-    // Sixth orbit: a brighter ivory track that crosses the reactor at a
-    // different diagonal angle, travelling through the front and rear depth.
-    const ringFMaterial = new THREE.MeshBasicMaterial({
-      color: 0xfaf9f5,
-      transparent: true,
-      opacity: 0.34,
-      depthTest: true,
-      depthWrite: false
-    });
-    const ringF = new THREE.Mesh(
-      new THREE.TorusGeometry(2.24, 0.006, 7, 240),
-      ringFMaterial
-    );
-    ringF.renderOrder = 2;
-
-    const ringFPivot = new THREE.Group();
-    ringFPivot.rotation.set(1.42, 0.72, -1.02);
-    ringFPivot.add(ringF);
-    sculpture.add(ringFPivot);
-
-    const ringFSpin = new THREE.Quaternion();
-    const ringFAxis = new THREE.Vector3(0.44, 0.84, -0.32).normalize();
 
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
@@ -250,29 +229,13 @@ if (canvas && frame && visual) {
         sculpture.rotation.y = time * 0.17 + smoothX;
         sculpture.rotation.x = Math.sin(time * 0.28) * 0.09 + smoothY - Math.min(window.scrollY || 0, 700) / 700 * 0.12;
         sculpture.rotation.z = Math.sin(time * 0.18) * 0.035;
-        // Restore the original three independent ring motions.
-        // Each ring changes its plane on a different axis, so the white/grey
-        // tracks visibly sweep across the copper orbit instead of looking fixed.
-        ringA.rotation.x += delta * 0.11;
-        ringA.rotation.z += delta * 0.16;
-
-        // Sweep both pale orbital planes continuously around the sculpture.
-        // Premultiplication rotates each pivot in the sculpture's coordinate
-        // space, producing visible diagonal crossings throughout each lap.
-        ringBSpin.setFromAxisAngle(ringBAxis, delta * 0.62);
-        ringBPivot.quaternion.premultiply(ringBSpin);
-
-        ringCSpin.setFromAxisAngle(ringCAxis, -delta * 0.52);
-        ringCPivot.quaternion.premultiply(ringCSpin);
-
-        ringDSpin.setFromAxisAngle(ringDAxis, delta * 0.38);
-        ringDPivot.quaternion.premultiply(ringDSpin);
-
-        ringESpin.setFromAxisAngle(ringEAxis, -delta * 0.31);
-        ringEPivot.quaternion.premultiply(ringESpin);
-
-        ringFSpin.setFromAxisAngle(ringFAxis, delta * 0.27);
-        ringFPivot.quaternion.premultiply(ringFSpin);
+        // Four controlled, continuous revolutions. The original diagonal
+        // inclination of every orbit is preserved at all times; only its
+        // azimuth around the reactor changes, so no track gradually flattens.
+        animateRingA(time);
+        animateRingB(time);
+        animateRingC(time);
+        animateRingD(time);
 
         points.rotation.y = -time * 0.018;
 
@@ -311,10 +274,6 @@ if (canvas && frame && visual) {
       ringCMaterial.dispose();
       ringD.geometry.dispose();
       ringDMaterial.dispose();
-      ringE.geometry.dispose();
-      ringEMaterial.dispose();
-      ringF.geometry.dispose();
-      ringFMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
