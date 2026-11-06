@@ -60,9 +60,9 @@ if (canvas && frame && visual) {
     sculpture.add(ringA);
 
     const ringBMaterial = new THREE.MeshBasicMaterial({
-      color: 0xe8e6dc,
+      color: 0xc9c8c1,
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.52,
       depthWrite: false
     });
     const ringB = new THREE.Mesh(
@@ -79,7 +79,7 @@ if (canvas && frame && visual) {
     const ringCMaterial = new THREE.MeshBasicMaterial({
       color: 0xfaf9f5,
       transparent: true,
-      opacity: 0.26,
+      opacity: 0.38,
       depthWrite: false
     });
     const ringC = new THREE.Mesh(
@@ -100,6 +100,28 @@ if (canvas && frame && visual) {
     const ringCSpin = new THREE.Quaternion();
     const ringBAxis = new THREE.Vector3(0.82, 0.34, 0.46).normalize();
     const ringCAxis = new THREE.Vector3(-0.38, 0.86, 0.34).normalize();
+
+    // Fourth orbit: a restrained silver-grey diagonal track.
+    // The three supplied/original tracks above remain intact.
+    const ringDMaterial = new THREE.MeshBasicMaterial({
+      color: 0xb8b7b0,
+      transparent: true,
+      opacity: 0.3,
+      depthWrite: false
+    });
+    const ringD = new THREE.Mesh(
+      new THREE.TorusGeometry(2.06, 0.0055, 6, 200),
+      ringDMaterial
+    );
+    ringD.renderOrder = 2;
+
+    const ringDPivot = new THREE.Group();
+    ringDPivot.rotation.set(0.82, 1.04, -0.92);
+    ringDPivot.add(ringD);
+    sculpture.add(ringDPivot);
+
+    const ringDSpin = new THREE.Quaternion();
+    const ringDAxis = new THREE.Vector3(0.58, -0.62, 0.52).normalize();
 
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
@@ -186,17 +208,20 @@ if (canvas && frame && visual) {
         // Restore the original three independent ring motions.
         // Each ring changes its plane on a different axis, so the white/grey
         // tracks visibly sweep across the copper orbit instead of looking fixed.
-        ringA.rotation.x += delta * 0.042;
-        ringA.rotation.z += delta * 0.072;
+        ringA.rotation.x += delta * 0.11;
+        ringA.rotation.z += delta * 0.16;
 
         // Sweep both pale orbital planes continuously around the sculpture.
         // Premultiplication rotates each pivot in the sculpture's coordinate
         // space, producing visible diagonal crossings throughout each lap.
-        ringBSpin.setFromAxisAngle(ringBAxis, delta * 0.42);
+        ringBSpin.setFromAxisAngle(ringBAxis, delta * 0.62);
         ringBPivot.quaternion.premultiply(ringBSpin);
 
-        ringCSpin.setFromAxisAngle(ringCAxis, -delta * 0.34);
+        ringCSpin.setFromAxisAngle(ringCAxis, -delta * 0.52);
         ringCPivot.quaternion.premultiply(ringCSpin);
+
+        ringDSpin.setFromAxisAngle(ringDAxis, delta * 0.38);
+        ringDPivot.quaternion.premultiply(ringDSpin);
 
         points.rotation.y = -time * 0.018;
 
@@ -233,6 +258,8 @@ if (canvas && frame && visual) {
       ringBMaterial.dispose();
       ringC.geometry.dispose();
       ringCMaterial.dispose();
+      ringD.geometry.dispose();
+      ringDMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
