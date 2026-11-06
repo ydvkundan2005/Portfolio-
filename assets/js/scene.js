@@ -29,14 +29,14 @@ if (canvas && frame && visual) {
 
     const sculpture = new THREE.Group();
     scene.add(sculpture);
-    const coreGeometry = new THREE.IcosahedronGeometry(1.24, 2);
+    const coreGeometry = new THREE.IcosahedronGeometry(1.38, 2);
     const coreMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xe8d3c9, metalness: 0.78, roughness: 0.24, clearcoat: 1,
       clearcoatRoughness: 0.18, emissive: 0x28130e, emissiveIntensity: 0.28
     });
     sculpture.add(new THREE.Mesh(coreGeometry, coreMaterial));
 
-    const wireGeometry = new THREE.IcosahedronGeometry(1.37, 2);
+    const wireGeometry = new THREE.IcosahedronGeometry(1.52, 2);
     const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xd97757, wireframe: true, transparent: true, opacity: 0.16 });
     sculpture.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
@@ -145,6 +145,29 @@ if (canvas && frame && visual) {
     const ringESpin = new THREE.Quaternion();
     const ringEAxis = new THREE.Vector3(-0.68, 0.3, 0.66).normalize();
 
+    // Sixth orbit: a brighter ivory track that crosses the reactor at a
+    // different diagonal angle, travelling through the front and rear depth.
+    const ringFMaterial = new THREE.MeshBasicMaterial({
+      color: 0xfaf9f5,
+      transparent: true,
+      opacity: 0.34,
+      depthTest: true,
+      depthWrite: false
+    });
+    const ringF = new THREE.Mesh(
+      new THREE.TorusGeometry(2.24, 0.006, 7, 240),
+      ringFMaterial
+    );
+    ringF.renderOrder = 2;
+
+    const ringFPivot = new THREE.Group();
+    ringFPivot.rotation.set(1.42, 0.72, -1.02);
+    ringFPivot.add(ringF);
+    sculpture.add(ringFPivot);
+
+    const ringFSpin = new THREE.Quaternion();
+    const ringFAxis = new THREE.Vector3(0.44, 0.84, -0.32).normalize();
+
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
     for (let i = 0; i < pointCount; i += 1) {
@@ -248,6 +271,9 @@ if (canvas && frame && visual) {
         ringESpin.setFromAxisAngle(ringEAxis, -delta * 0.31);
         ringEPivot.quaternion.premultiply(ringESpin);
 
+        ringFSpin.setFromAxisAngle(ringFAxis, delta * 0.27);
+        ringFPivot.quaternion.premultiply(ringFSpin);
+
         points.rotation.y = -time * 0.018;
 
         // Original satellite motion, now driven by elapsed time.
@@ -287,6 +313,8 @@ if (canvas && frame && visual) {
       ringDMaterial.dispose();
       ringE.geometry.dispose();
       ringEMaterial.dispose();
+      ringF.geometry.dispose();
+      ringFMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
