@@ -72,7 +72,7 @@ if (canvas && frame && visual) {
       depthWrite: false
     });
     const ringB = new THREE.Mesh(
-      new THREE.TorusGeometry(2.0, 0.0065, 6, 220),
+      new THREE.TorusGeometry(2.2, 0.0065, 6, 240),
       ringBMaterial
     );
     ringB.renderOrder = 2;
@@ -82,67 +82,28 @@ if (canvas && frame && visual) {
     ringBPivot.add(ringB);
     orbitSystem.add(ringBPivot);
 
-    const ringCMaterial = new THREE.MeshBasicMaterial({
-      color: 0xfaf9f5,
-      transparent: true,
-      opacity: 0.38,
-      depthWrite: false
-    });
-    const ringC = new THREE.Mesh(
-      new THREE.TorusGeometry(1.55, 0.0045, 5, 200),
-      ringCMaterial
-    );
-    ringC.renderOrder = 2;
-
-    const ringCPivot = new THREE.Group();
-    ringCPivot.rotation.set(0.3, 0.65, 1.05);
-    ringCPivot.add(ringC);
-    orbitSystem.add(ringCPivot);
-
-    // Reusable quaternions avoid per-frame allocations. These axes are not
-    // parallel to either orbit's normal, so each complete ellipse visibly
-    // changes its diagonal plane instead of merely spinning invisibly in place.
     // Continuous orbital travel around the sculpture's local Z axis.
     // Rotating the plane around this axis preserves each orbit's inclination
     // to the viewer; its projected path stays elliptical through every cycle.
     const orbitSpinAxis = new THREE.Vector3(0, 0, 1);
 
-    const createOrbitAnimator = (pivot, angularSpeed) => {
+    const createOrbitAnimator = (pivot, angularSpeed, phase = 0) => {
       const startingPose = pivot.quaternion.clone();
       const spin = new THREE.Quaternion();
 
       return (time) => {
-        spin.setFromAxisAngle(orbitSpinAxis, time * angularSpeed);
+        // Absolute-time rotation prevents accumulated-angle drift. The fixed
+        // starting pose preserves the track's diagonal inclination forever.
+        spin.setFromAxisAngle(orbitSpinAxis, phase + time * angularSpeed);
         pivot.quaternion.copy(spin).multiply(startingPose);
       };
     };
 
     // Different speeds and directions keep the four tracks layered rather
     // than moving as one rigid bundle. All start at their current visual pose.
-    const animateRingA = createOrbitAnimator(ringAPivot, 0.17);
-    const animateRingB = createOrbitAnimator(ringBPivot, -0.135);
-    const animateRingC = createOrbitAnimator(ringCPivot, 0.155);
+    const animateRingA = createOrbitAnimator(ringAPivot, 0.145, 0);
+    const animateRingB = createOrbitAnimator(ringBPivot, -0.103, 0.92);
 
-    // Fourth orbit: a restrained silver-grey diagonal track.
-    // The three supplied/original tracks above remain intact.
-    const ringDMaterial = new THREE.MeshBasicMaterial({
-      color: 0xb8b7b0,
-      transparent: true,
-      opacity: 0.3,
-      depthWrite: false
-    });
-    const ringD = new THREE.Mesh(
-      new THREE.TorusGeometry(2.18, 0.0055, 6, 220),
-      ringDMaterial
-    );
-    ringD.renderOrder = 2;
-
-    const ringDPivot = new THREE.Group();
-    ringDPivot.rotation.set(0.82, 1.04, -0.92);
-    ringDPivot.add(ringD);
-    orbitSystem.add(ringDPivot);
-
-    const animateRingD = createOrbitAnimator(ringDPivot, -0.105);
 
 
 
@@ -230,13 +191,10 @@ if (canvas && frame && visual) {
         sculpture.rotation.y = time * 0.17 + smoothX;
         sculpture.rotation.x = Math.sin(time * 0.28) * 0.09 + smoothY - Math.min(window.scrollY || 0, 700) / 700 * 0.12;
         sculpture.rotation.z = Math.sin(time * 0.18) * 0.035;
-        // Four controlled, continuous revolutions. The original diagonal
-        // inclination of every orbit is preserved at all times; only its
-        // azimuth around the reactor changes, so no track gradually flattens.
+        // Two deliberate, continuous orbital paths. Their radii and phase
+        // speeds differ, while each retains its original tilted plane.
         animateRingA(time);
         animateRingB(time);
-        animateRingC(time);
-        animateRingD(time);
 
         points.rotation.y = -time * 0.018;
 
@@ -271,10 +229,6 @@ if (canvas && frame && visual) {
       ringMaterial.dispose();
       ringB.geometry.dispose();
       ringBMaterial.dispose();
-      ringC.geometry.dispose();
-      ringCMaterial.dispose();
-      ringD.geometry.dispose();
-      ringDMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
