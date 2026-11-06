@@ -22,6 +22,7 @@ Project status and limitations are documented in each repository. A project summ
 
 ## Design and implementation
 
+- Editorial hero layout with the main statement first, followed by a compact portrait and profile details.
 - Responsive single-page layout with section navigation.
 - Three.js-based animated hero visual with responsive camera framing and a CSS fallback.
 - Scroll-triggered section reveals and subtle interactive details.
