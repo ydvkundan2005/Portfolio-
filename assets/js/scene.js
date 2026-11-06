@@ -29,14 +29,14 @@ if (canvas && frame && visual) {
 
     const sculpture = new THREE.Group();
     scene.add(sculpture);
-    const coreGeometry = new THREE.IcosahedronGeometry(1.08, 2);
+    const coreGeometry = new THREE.IcosahedronGeometry(1.24, 2);
     const coreMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xe8d3c9, metalness: 0.78, roughness: 0.24, clearcoat: 1,
       clearcoatRoughness: 0.18, emissive: 0x28130e, emissiveIntensity: 0.28
     });
     sculpture.add(new THREE.Mesh(coreGeometry, coreMaterial));
 
-    const wireGeometry = new THREE.IcosahedronGeometry(1.19, 2);
+    const wireGeometry = new THREE.IcosahedronGeometry(1.37, 2);
     const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xd97757, wireframe: true, transparent: true, opacity: 0.16 });
     sculpture.add(new THREE.Mesh(wireGeometry, wireMaterial));
 
@@ -52,7 +52,7 @@ if (canvas && frame && visual) {
     });
 
     const ringA = new THREE.Mesh(
-      new THREE.TorusGeometry(1.62, 0.012, 8, 180),
+      new THREE.TorusGeometry(1.74, 0.012, 8, 200),
       ringMaterial
     );
     ringA.rotation.set(0.98, 0.15, 0.46);
@@ -66,7 +66,7 @@ if (canvas && frame && visual) {
       depthWrite: false
     });
     const ringB = new THREE.Mesh(
-      new THREE.TorusGeometry(1.88, 0.0065, 6, 200),
+      new THREE.TorusGeometry(2.0, 0.0065, 6, 220),
       ringBMaterial
     );
     ringB.renderOrder = 2;
@@ -83,7 +83,7 @@ if (canvas && frame && visual) {
       depthWrite: false
     });
     const ringC = new THREE.Mesh(
-      new THREE.TorusGeometry(1.43, 0.0045, 5, 180),
+      new THREE.TorusGeometry(1.55, 0.0045, 5, 200),
       ringCMaterial
     );
     ringC.renderOrder = 2;
@@ -110,7 +110,7 @@ if (canvas && frame && visual) {
       depthWrite: false
     });
     const ringD = new THREE.Mesh(
-      new THREE.TorusGeometry(2.06, 0.0055, 6, 200),
+      new THREE.TorusGeometry(2.18, 0.0055, 6, 220),
       ringDMaterial
     );
     ringD.renderOrder = 2;
@@ -122,6 +122,28 @@ if (canvas && frame && visual) {
 
     const ringDSpin = new THREE.Quaternion();
     const ringDAxis = new THREE.Vector3(0.58, -0.62, 0.52).normalize();
+
+    // Fifth orbit: a clean ivory-white diagonal path, offset from the other
+    // four tracks so it adds depth without turning the composition into a knot.
+    const ringEMaterial = new THREE.MeshBasicMaterial({
+      color: 0xfaf9f5,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false
+    });
+    const ringE = new THREE.Mesh(
+      new THREE.TorusGeometry(2.12, 0.005, 6, 220),
+      ringEMaterial
+    );
+    ringE.renderOrder = 2;
+
+    const ringEPivot = new THREE.Group();
+    ringEPivot.rotation.set(1.12, -0.48, 0.56);
+    ringEPivot.add(ringE);
+    sculpture.add(ringEPivot);
+
+    const ringESpin = new THREE.Quaternion();
+    const ringEAxis = new THREE.Vector3(-0.68, 0.3, 0.66).normalize();
 
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
@@ -167,7 +189,7 @@ if (canvas && frame && visual) {
       camera.aspect = aspect;
 
       // Fit the outer orbital ring inside the camera frustum at every container ratio.
-      const framingRadius = 2.42;
+      const framingRadius = 2.34;
       const halfFovRadians = THREE.MathUtils.degToRad(camera.fov / 2);
       const requiredDistance = (framingRadius / Math.tan(halfFovRadians)) * Math.max(1, 1 / aspect);
       camera.position.set(0, 0, Math.max(6.8, requiredDistance * 1.08));
@@ -223,6 +245,9 @@ if (canvas && frame && visual) {
         ringDSpin.setFromAxisAngle(ringDAxis, delta * 0.38);
         ringDPivot.quaternion.premultiply(ringDSpin);
 
+        ringESpin.setFromAxisAngle(ringEAxis, -delta * 0.31);
+        ringEPivot.quaternion.premultiply(ringESpin);
+
         points.rotation.y = -time * 0.018;
 
         // Original satellite motion, now driven by elapsed time.
@@ -260,6 +285,8 @@ if (canvas && frame && visual) {
       ringCMaterial.dispose();
       ringD.geometry.dispose();
       ringDMaterial.dispose();
+      ringE.geometry.dispose();
+      ringEMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
