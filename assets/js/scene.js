@@ -29,6 +29,11 @@ if (canvas && frame && visual) {
 
     const sculpture = new THREE.Group();
     scene.add(sculpture);
+
+    // Keep the central sculpture independent from the orbit system so its shape
+    // and motion remain unchanged while the orbital paths move around it.
+    const orbitSystem = new THREE.Group();
+    scene.add(orbitSystem);
     const coreGeometry = new THREE.IcosahedronGeometry(1.08, 2);
     const coreMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xe8d3c9, metalness: 0.78, roughness: 0.24, clearcoat: 1,
@@ -43,19 +48,29 @@ if (canvas && frame && visual) {
     const ringMaterial = new THREE.MeshStandardMaterial({
       color: 0xd97757, metalness: 0.66, roughness: 0.35, emissive: 0x4b2017, emissiveIntensity: 0.22
     });
-    const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.012, 8, 150), ringMaterial);
-    ringA.rotation.set(0.98, 0.15, 0.46);
-    sculpture.add(ringA);
-    const ringB = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.006, 6, 160), new THREE.MeshBasicMaterial({
-      color: 0xe8e6dc, transparent: true, opacity: 0.34
-    }));
-    ringB.rotation.set(1.3, -0.7, -0.23);
-    sculpture.add(ringB);
-    const ringC = new THREE.Mesh(new THREE.TorusGeometry(1.43, 0.004, 5, 120), new THREE.MeshBasicMaterial({
-      color: 0xffffff, transparent: true, opacity: 0.23
-    }));
-    ringC.rotation.set(0.3, 0.65, 1.05);
-    sculpture.add(ringC);
+    // Three elliptical tracks, deliberately inclined on different axes.
+    // Their different planes create the crossing, armillary-sphere silhouette
+    // instead of a set of flat concentric circles.
+    const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.62, 0.014, 10, 220), ringMaterial);
+    ringA.rotation.set(1.1, 0.14, 0.28);
+    ringA.scale.set(1.1, 0.8, 1);
+    orbitSystem.add(ringA);
+
+    const ringBMaterial = new THREE.MeshBasicMaterial({
+      color: 0xe8e6dc, transparent: true, opacity: 0.3, depthWrite: false
+    });
+    const ringB = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.007, 6, 220), ringBMaterial);
+    ringB.rotation.set(0.42, 1.16, -0.62);
+    ringB.scale.set(1, 0.72, 1);
+    orbitSystem.add(ringB);
+
+    const ringCMaterial = new THREE.MeshBasicMaterial({
+      color: 0xc4a484, transparent: true, opacity: 0.2, depthWrite: false
+    });
+    const ringC = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.005, 5, 200), ringCMaterial);
+    ringC.rotation.set(1.42, -0.9, 0.82);
+    ringC.scale.set(1.14, 0.86, 1);
+    orbitSystem.add(ringC);
 
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
@@ -80,7 +95,10 @@ if (canvas && frame && visual) {
         color: 0xd97757, emissive: 0x9d4e34, emissiveIntensity: 0.8, metalness: 0.25, roughness: 0.3
       })
     );
-    scene.add(satellite);
+    // The satellite is parented to the primary terracotta orbit. Its path
+    // therefore stays on the visible track as the orbit rig precesses.
+    ringA.add(satellite);
+    satellite.position.set(1.62, 0, 0);
 
     let pointerX = 0;
     let pointerY = 0;
@@ -99,7 +117,7 @@ if (canvas && frame && visual) {
       camera.aspect = aspect;
 
       // Fit the outer orbital ring inside the camera frustum at every container ratio.
-      const framingRadius = 2.08;
+      const framingRadius = 2.18;
       const halfFovRadians = THREE.MathUtils.degToRad(camera.fov / 2);
       const requiredDistance = (framingRadius / Math.tan(halfFovRadians)) * Math.max(1, 1 / aspect);
       camera.position.set(0, 0, Math.max(6.8, requiredDistance * 1.08));
@@ -136,11 +154,16 @@ if (canvas && frame && visual) {
         sculpture.rotation.y = time * 0.17 + smoothX;
         sculpture.rotation.x = Math.sin(time * 0.28) * 0.09 + smoothY - Math.min(window.scrollY || 0, 700) / 700 * 0.12;
         sculpture.rotation.z = Math.sin(time * 0.18) * 0.035;
-        ringA.rotation.z += 0.0016;
-        ringB.rotation.x += 0.0008;
-        ringC.rotation.y -= 0.0012;
+        // Slow whole-system drift plus a restrained precession on each track.
+        // The different inclinations remain visible throughout the rotation.
+        orbitSystem.rotation.y = time * 0.11;
+        orbitSystem.rotation.z = Math.sin(time * 0.19) * 0.055;
+        ringA.rotation.z = 0.28 + Math.sin(time * 0.17) * 0.045;
+        ringB.rotation.x = 0.42 + Math.sin(time * 0.14 + 1.1) * 0.04;
+        ringC.rotation.y = -0.9 + Math.sin(time * 0.12 + 2.2) * 0.035;
         points.rotation.y = -time * 0.018;
-        satellite.position.set(Math.cos(time * 0.48) * 1.83, Math.sin(time * 0.48) * 0.48, Math.sin(time * 0.48) * 0.95);
+        const satelliteAngle = time * 0.58;
+        satellite.position.set(Math.cos(satelliteAngle) * 1.62, Math.sin(satelliteAngle) * 1.62, 0);
       }
       renderer.render(scene, camera);
     };
@@ -165,9 +188,9 @@ if (canvas && frame && visual) {
       ringA.geometry.dispose();
       ringMaterial.dispose();
       ringB.geometry.dispose();
-      ringB.material.dispose();
+      ringBMaterial.dispose();
       ringC.geometry.dispose();
-      ringC.material.dispose();
+      ringCMaterial.dispose();
       pointGeometry.dispose();
       points.material.dispose();
       satellite.geometry.dispose();
