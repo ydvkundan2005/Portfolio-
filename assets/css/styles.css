@@ -512,3 +512,122 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     padding-bottom: 68px;
   }
 }
+
+
+/* Compact skills and project cards; tighten section divider spacing. */
+.section {
+  padding-top: clamp(56px, 6.5vw, 88px);
+  padding-bottom: clamp(56px, 6.5vw, 88px);
+}
+.section-heading {
+  margin-bottom: 34px;
+}
+.hero {
+  padding-bottom: 72px;
+}
+.projects-section {
+  padding-bottom: clamp(58px, 6.5vw, 90px);
+}
+.contact-inner {
+  padding-top: clamp(64px, 7vw, 92px);
+  padding-bottom: clamp(64px, 7vw, 92px);
+}
+
+/* Skills: tighter internal spacing and softer edges. */
+.skills-grid {
+  gap: 10px;
+}
+.skill-card {
+  min-height: 154px;
+  padding: 17px 18px 19px;
+  border-radius: 20px;
+}
+.skill-card h3 {
+  margin: 16px 0 10px;
+  font-size: 17px;
+}
+.skill-tags {
+  gap: 5px;
+}
+.skill-tags span {
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-size: 8px;
+}
+
+/* Projects: slightly shorter cards without compressing descriptions. */
+.projects-grid {
+  gap: 12px;
+}
+.project-card {
+  min-height: 218px;
+  padding: 21px 22px 19px;
+  border-radius: 20px;
+}
+.project-card h3 {
+  margin: 19px 0 8px;
+  font-size: clamp(16px, 1.8vw, 20px);
+}
+.project-card p {
+  margin-bottom: 13px;
+  font-size: 11.5px;
+  line-height: 1.8;
+}
+
+@media (max-width: 1080px) {
+  .section {
+    padding-top: 68px;
+    padding-bottom: 68px;
+  }
+  .section-heading {
+    margin-bottom: 32px;
+  }
+}
+@media (max-width: 740px) {
+  .hero {
+    padding-bottom: 60px;
+  }
+  .section {
+    padding-top: 58px;
+    padding-bottom: 58px;
+  }
+  .section-heading {
+    margin-bottom: 28px;
+  }
+  .skill-card {
+    min-height: 150px;
+    padding: 16px 14px 17px;
+    border-radius: 18px;
+  }
+  .skill-card h3 {
+    margin: 14px 0 9px;
+    font-size: 16px;
+  }
+  .project-card {
+    min-height: 232px;
+    padding: 18px 17px;
+    border-radius: 18px;
+  }
+  .project-card h3 {
+    margin-top: 17px;
+    font-size: 17px;
+  }
+}
+@media (max-width: 440px) {
+  .section {
+    padding-top: 52px;
+    padding-bottom: 52px;
+  }
+  .skill-card {
+    min-height: auto;
+    padding: 16px 17px;
+  }
+  .project-card {
+    min-height: 208px;
+    padding: 17px 16px;
+  }
+  .contact-inner {
+    padding-top: 64px;
+    padding-bottom: 60px;
+  }
+}
