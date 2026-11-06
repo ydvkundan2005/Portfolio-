@@ -397,3 +397,118 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   .about-art { min-height: 230px; }
   .skills-motif { width: 160px; height: 112px; }
 }
+
+
+/* Refined spacing and softer card geometry. */
+@media (min-width: 1081px) {
+  .hero {
+    align-items: start;
+    padding-top: clamp(24px, 2vw, 30px);
+  }
+  .hero-copy {
+    align-self: start;
+    margin-top: 0;
+  }
+}
+
+.section {
+  padding-top: clamp(76px, 9vw, 124px);
+  padding-bottom: clamp(76px, 9vw, 118px);
+}
+.section-heading {
+  margin-bottom: 44px;
+}
+.projects-section {
+  padding-bottom: clamp(82px, 9vw, 120px);
+}
+.contact-inner {
+  padding-top: clamp(78px, 8vw, 112px);
+  padding-bottom: clamp(78px, 8vw, 112px);
+}
+
+.skills-grid {
+  gap: 12px;
+  border: 0;
+}
+.skill-card {
+  min-height: 174px;
+  padding: 21px 21px 23px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.skill-card h3 {
+  margin: 21px 0 13px;
+}
+.skill-tags {
+  gap: 6px;
+}
+
+.project-card {
+  min-height: 258px;
+  padding: 24px 25px 22px;
+  border-radius: 18px;
+}
+.project-card h3 {
+  margin: 24px 0 10px;
+}
+.project-card p {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 1080px) {
+  .section {
+    padding-top: 82px;
+    padding-bottom: 82px;
+  }
+  .section-heading {
+    margin-bottom: 40px;
+  }
+}
+@media (max-width: 740px) {
+  .hero {
+    padding-top: 34px;
+  }
+  .section {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .section-heading {
+    margin-bottom: 32px;
+  }
+  .skills-grid {
+    gap: 10px;
+  }
+  .skill-card {
+    min-height: 172px;
+    padding: 18px 15px 20px;
+    border-radius: 16px;
+  }
+  .project-card {
+    min-height: 270px;
+    padding: 19px 18px;
+    border-radius: 16px;
+  }
+}
+@media (max-width: 440px) {
+  .hero {
+    padding-top: 28px;
+  }
+  .section {
+    padding-top: 62px;
+    padding-bottom: 62px;
+  }
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .skill-card {
+    min-height: auto;
+    padding: 19px;
+  }
+  .project-card {
+    min-height: 228px;
+  }
+  .contact-inner {
+    padding-top: 72px;
+    padding-bottom: 68px;
+  }
+}
