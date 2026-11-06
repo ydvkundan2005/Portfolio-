@@ -69,9 +69,12 @@ if (canvas && frame && visual) {
       new THREE.TorusGeometry(1.88, 0.0065, 6, 200),
       ringBMaterial
     );
-    ringB.rotation.set(1.3, -0.7, -0.23);
     ringB.renderOrder = 2;
-    sculpture.add(ringB);
+
+    const ringBPivot = new THREE.Group();
+    ringBPivot.rotation.set(1.3, -0.7, -0.23);
+    ringBPivot.add(ringB);
+    sculpture.add(ringBPivot);
 
     const ringCMaterial = new THREE.MeshBasicMaterial({
       color: 0xfaf9f5,
@@ -83,9 +86,20 @@ if (canvas && frame && visual) {
       new THREE.TorusGeometry(1.43, 0.0045, 5, 180),
       ringCMaterial
     );
-    ringC.rotation.set(0.3, 0.65, 1.05);
     ringC.renderOrder = 2;
-    sculpture.add(ringC);
+
+    const ringCPivot = new THREE.Group();
+    ringCPivot.rotation.set(0.3, 0.65, 1.05);
+    ringCPivot.add(ringC);
+    sculpture.add(ringCPivot);
+
+    // Reusable quaternions avoid per-frame allocations. These axes are not
+    // parallel to either orbit's normal, so each complete ellipse visibly
+    // changes its diagonal plane instead of merely spinning invisibly in place.
+    const ringBSpin = new THREE.Quaternion();
+    const ringCSpin = new THREE.Quaternion();
+    const ringBAxis = new THREE.Vector3(0.82, 0.34, 0.46).normalize();
+    const ringCAxis = new THREE.Vector3(-0.38, 0.86, 0.34).normalize();
 
     const pointCount = 190;
     const pointPositions = new Float32Array(pointCount * 3);
@@ -175,11 +189,14 @@ if (canvas && frame && visual) {
         ringA.rotation.x += delta * 0.042;
         ringA.rotation.z += delta * 0.072;
 
-        ringB.rotation.x += delta * 0.078;
-        ringB.rotation.y -= delta * 0.018;
+        // Sweep both pale orbital planes continuously around the sculpture.
+        // Premultiplication rotates each pivot in the sculpture's coordinate
+        // space, producing visible diagonal crossings throughout each lap.
+        ringBSpin.setFromAxisAngle(ringBAxis, delta * 0.42);
+        ringBPivot.quaternion.premultiply(ringBSpin);
 
-        ringC.rotation.y -= delta * 0.09;
-        ringC.rotation.x += delta * 0.024;
+        ringCSpin.setFromAxisAngle(ringCAxis, -delta * 0.34);
+        ringCPivot.quaternion.premultiply(ringCSpin);
 
         points.rotation.y = -time * 0.018;
 
